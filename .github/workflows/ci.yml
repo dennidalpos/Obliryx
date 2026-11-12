@@ -25,3 +25,11 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: python -m pip check
       - run: python -I -m obliryx --help
+      - name: Test launcher (Windows PowerShell 5.1)
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: .\tests\test_launcher.ps1
+      - name: Test launcher (PowerShell 7)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\tests\test_launcher.ps1

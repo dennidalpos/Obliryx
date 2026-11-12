@@ -4,6 +4,16 @@ Obliryx raccoglie in un archivio personale i riscontri di mailing list, marketin
 
 ## Avvio locale
 
+Su Windows puoi usare il menu PowerShell dalla cartella del progetto:
+
+```powershell
+.\Avvia-Obliryx.ps1
+```
+
+Il menu guida importazione, ricerche, revisione dei riscontri, bozze e disiscrizioni. Se l'ambiente Python manca, propone di creare `.venv` e installare le dipendenze. Passphrase, chiavi API e credenziali vengono richieste direttamente da Obliryx durante l'operazione. Le azioni esterne mantengono le conferme della CLI. Usa `0` per tornare indietro e `q` per annullare l'inserimento di un parametro.
+
+Puoi scegliere un archivio per la sessione dal menu o con `-DatabasePath "D:\Dati personali\obliryx.sqlite3"`. Il parametro `-PythonPath` permette di usare il percorso di un interprete Python già configurato. Il launcher funziona con Windows PowerShell 5.1 e PowerShell 7.
+
 Serve Python 3.11 o successivo. Da PowerShell, nella cartella del progetto:
 
 ```powershell
