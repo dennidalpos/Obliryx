@@ -93,16 +93,7 @@ def text_parts(message):
         yield message
 
 
-def analyze_email(raw, pattern=None):
-    message = BytesParser(policy=policy.default).parsebytes(raw)
-    sender = message.get("From")
-    senders = getattr(sender, "addresses", ())
-    sender_address = address(senders[0].addr_spec) if len(senders) == 1 else None
-    subject = str(message.get("Subject", ""))[:300]
-    matches = []
-    if pattern and pattern.search(normalized(subject)):
-        matches.append("oggetto")
-    list_id = str(message.get("List-Id", ""))[:250]
+def header_routes(message):
     header = message.get_all("List-Unsubscribe", [])
     post = message.get_all("List-Unsubscribe-Post", [])
     routes = []
@@ -122,7 +113,20 @@ def analyze_email(raw, pattern=None):
             and sum(value.lower().startswith(("http:", "https:")) for value in values) == 1
             and len(post) == 1 and str(post[0]).strip() == "List-Unsubscribe=One-Click"):
         web[0]["kind"] = "one_click_candidate"
+    return routes
 
+
+def analyze_email(raw, pattern=None):
+    message = BytesParser(policy=policy.default).parsebytes(raw)
+    sender = message.get("From")
+    senders = getattr(sender, "addresses", ())
+    sender_address = address(senders[0].addr_spec) if len(senders) == 1 else None
+    subject = str(message.get("Subject", ""))[:300]
+    matches = []
+    if pattern and pattern.search(normalized(subject)):
+        matches.append("oggetto")
+    list_id = str(message.get("List-Id", ""))[:250]
+    routes = header_routes(message)
     indicators = []
     for part in text_parts(message):
         try:
@@ -154,7 +158,7 @@ def analyze_email(raw, pattern=None):
                 routes.append({"kind": "web_body", "value": url})
     if list_id:
         indicators.append("intestazione List-Id")
-    if header:
+    if "List-Unsubscribe" in message:
         indicators.append("intestazione List-Unsubscribe")
     if MARKETING.search(subject):
         indicators.append("oggetto compatibile con marketing")

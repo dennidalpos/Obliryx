@@ -1,0 +1,232 @@
+{
+  "schema": 1,
+  "version": "2026.11.12.1",
+  "procedures": [
+    {
+      "id": "adform-browser-opt-out",
+      "controller": "Adform A/S",
+      "countries": [
+        "EU"
+      ],
+      "action": "opt_out_pubblicitario",
+      "source": "https://site.adform.com/privacy-center/platform-privacy/opt-out/",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "web",
+        "destination": "https://site.adform.com/privacy-center/platform-privacy/opt-out/",
+        "fields": [
+          "browser interessato",
+          "cookie di preferenza"
+        ],
+        "effect": "Disattiva il targeting Adform per il browser in cui viene salvata la scelta."
+      },
+      "review_sha256": "d357649d812f07cd4caa952b269ef540b42f7ea1b8aa2d985d87f96c0186c69e"
+    },
+    {
+      "id": "criteo-accesso",
+      "controller": "Criteo",
+      "countries": [
+        "EU"
+      ],
+      "action": "accesso",
+      "source": "https://www.criteo.com/privacy/your-rights/",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "email",
+        "destination": "dpo@criteo.com",
+        "fields": [
+          "tipo di richiesta",
+          "identificativi da concordare con il titolare"
+        ],
+        "effect": "Invia al titolare una richiesta di accesso ai dati personali."
+      },
+      "controller_source": "https://www.criteo.com/privacy/",
+      "review_sha256": "9c784d91a2a08e1cae8adc44ad4351b511a345cc9259ee74e6c6f620c7581d2a"
+    },
+    {
+      "id": "liveramp-accesso-it",
+      "controller": "LiveRamp France SAS",
+      "countries": [
+        "IT"
+      ],
+      "action": "accesso",
+      "source": "https://liveramp.com/privacy",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "email",
+        "destination": "privacy.it@liveramp.com",
+        "fields": [
+          "tipo di richiesta",
+          "identificativi da concordare con il titolare"
+        ],
+        "effect": "Chiede accesso tramite il contatto pubblicato per i residenti in Italia."
+      },
+      "controller_source": "https://liveramp.com/uk/privacy/privacy-policy-dei-servizi",
+      "review_sha256": "4eda8b572dbd963ed54ad5ea0a85852cb31f78cac8f7acf5c0b5bbd182aa6ac2"
+    },
+    {
+      "id": "lotame-browser-opt-out",
+      "controller": "Epsilon Data Management, LLC (Lotame)",
+      "countries": [
+        "EU"
+      ],
+      "action": "opt_out_pubblicitario",
+      "source": "https://www.lotame.com/privacy/services-privacy-notice/",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "web",
+        "destination": "https://www.lotame.com/privacy/services-privacy-notice/",
+        "fields": [
+          "browser interessato",
+          "cookie di preferenza"
+        ],
+        "effect": "Usa lo strumento per i due identificativi Lotame indicati nella pagina, nel browser corrente."
+      },
+      "review_sha256": "f8d4b3f254d504b5608fa9cd46991cced84112295ef6e984b43f6871a2c557c8"
+    },
+    {
+      "id": "magnite-browser-opt-out",
+      "controller": "Magnite, Inc. e affiliate",
+      "countries": [
+        "EU"
+      ],
+      "action": "opt_out_pubblicitario",
+      "source": "https://www.magnite.com/legal/user-choice-portal/",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "web",
+        "destination": "https://www.magnite.com/legal/user-choice-portal/",
+        "fields": [
+          "browser interessato",
+          "cookie di preferenza"
+        ],
+        "effect": "Registra la scelta relativa al targeting Magnite nel browser corrente."
+      },
+      "controller_source": "https://www.magnite.com/legal/advertising-platform-privacy-policy/",
+      "review_sha256": "6091503af423e50c4a4ddf3e4596ee9f818a39177a449d80a53e01375a0a1ca9"
+    },
+    {
+      "id": "openx-browser-opt-out",
+      "controller": "OpenX Poland Sp. z o.o.",
+      "countries": [
+        "EU"
+      ],
+      "action": "opt_out_pubblicitario",
+      "source": "https://www.openx.com/privacy-center/",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "web",
+        "destination": "https://www.openx.com/privacy-center/",
+        "fields": [
+          "browser interessato",
+          "verificare i requisiti nel portale"
+        ],
+        "effect": "Dal centro privacy, seleziona il portale dedicato all’opt-out del browser."
+      },
+      "controller_source": "https://www.openx.com/legal/ad-exchange-privacy-policy/",
+      "review_sha256": "27a8455d4a9415d3df4a19cd8bef80efda8207bad4f321ca0324f9fbe041cd6b"
+    },
+    {
+      "id": "pubmatic-accesso",
+      "controller": "PubMatic, Inc.",
+      "countries": [
+        "EU"
+      ],
+      "action": "accesso",
+      "source": "https://pubmatic.com/legal/your-privacy-choices/",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "web",
+        "destination": "https://pubmatic.com/legal/your-privacy-choices/",
+        "fields": [
+          "tipo di richiesta",
+          "almeno un identificativo digitale",
+          "altri dati indicati nel modulo"
+        ],
+        "effect": "Dal centro delle scelte privacy, segui il modulo per una richiesta di accesso."
+      },
+      "controller_source": "https://pubmatic.com/legal/privacy-policy/",
+      "review_sha256": "6a5d5dc939e3d22ab898f39077a471a50e8f207eda69a5a4f8b2d54bf3dedf47"
+    },
+    {
+      "id": "quantcast-browser-opt-out",
+      "controller": "Quantcast International Limited",
+      "countries": [
+        "EU"
+      ],
+      "action": "opt_out_pubblicitario",
+      "source": "https://secure.quantcast.com/privacy-choices/",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "web",
+        "destination": "https://secure.quantcast.com/privacy-choices/",
+        "fields": [
+          "browser interessato",
+          "metodo di opt-out scelto"
+        ],
+        "effect": "Esercita la scelta sul browser con uno dei metodi descritti nella pagina."
+      },
+      "controller_source": "https://quantcast.pactsafe.io/versions/6760a77b4189a5fd3c7d6fbd.pdf",
+      "review_sha256": "5ffea4452a6cd65cae40764657d11f3756d042dc97e448472a71a8329a45f91c"
+    },
+    {
+      "id": "taboola-accesso",
+      "controller": "Taboola.com Ltd.",
+      "countries": [
+        "EU"
+      ],
+      "action": "accesso",
+      "source": "https://policies.taboola.com/privacy-policy/",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "email",
+        "destination": "dsr@taboola.com",
+        "fields": [
+          "tipo di richiesta",
+          "identificativi da concordare con il titolare"
+        ],
+        "effect": "Usa il contatto per le richieste sui dati indicato nella sezione europea."
+      },
+      "review_sha256": "cf0e54f73c3ad19377765f09b04655c2f5a51a7c7f1067b94136eeff67e7e1d2"
+    },
+    {
+      "id": "teads-browser-opt-out",
+      "controller": "Teads UK Limited",
+      "countries": [
+        "EU"
+      ],
+      "action": "opt_out_pubblicitario",
+      "source": "https://privacy-policy.teads.com/?p=1288",
+      "license": "MIT",
+      "support": "manuale",
+      "reviewed_on": "2026-11-12",
+      "channel": {
+        "kind": "web",
+        "destination": "https://privacy-policy.teads.com/?p=1288",
+        "fields": [
+          "browser o dispositivo interessato"
+        ],
+        "effect": "Usa il controllo della sezione sui diritti per disattivare gli annunci personalizzati Teads su quel browser."
+      },
+      "review_sha256": "19578f6fb9b91abc95dbadecf624e6312d47d0f8e8d5864d1d77cedb8057cd5f"
+    }
+  ]
+}

@@ -7,13 +7,16 @@ import sqlite3
 import sys
 import webbrowser
 from contextlib import closing
+from hashlib import sha256
 from pathlib import Path
 from urllib.parse import parse_qsl, quote, urlencode, urlsplit
 
 from .analysis import DATA_TYPES, address, https_url, normalized, severity
+from .broker_catalog import catalog_view
 from .imap_source import recent_messages, retrieve_message, validate_destination
 from .mail_import import (campaign_summary, collect, collect_records, eml_messages, find_original,
                           mbox_messages, message_identities, scan_mail, scan_records, watch_eml)
+from .multistep_demo import run_demo
 from .network import post_form, resolve_destination
 from .one_click import submit, verify_message
 from .providers import breach_matches, search_web
@@ -24,10 +27,13 @@ from .web_forms import discover_unsubscribe_form
 REVIEWABLE_WEB_ROUTES = {"web_header", "web_body", "unsubscribe_candidate"}
 
 
+def data_directory():
+    return Path(os.environ.get("LOCALAPPDATA", Path.home() / ".local" / "share")) / "obliryx"
+
+
 def parser():
     root = argparse.ArgumentParser(prog="obliryx", description="Registro locale di privacy personale")
-    data_home = Path(os.environ.get("LOCALAPPDATA", Path.home() / ".local" / "share"))
-    root.add_argument("--db", type=Path, default=data_home / "obliryx" / "findings.sqlite3")
+    root.add_argument("--db", type=Path, default=data_directory() / "findings.sqlite3")
     commands = root.add_subparsers(dest="command", required=True)
     import_cmd = commands.add_parser("import-eml", help="Analizza un file .eml o una cartella di .eml")
     import_cmd.add_argument("path", type=Path)
@@ -91,6 +97,21 @@ def parser():
     imap_unsubscribe.add_argument("id")
     imap_unsubscribe.add_argument("--source", type=int, help="Numero della fonte IMAP, da 1")
     imap_unsubscribe.add_argument("--auth", choices=("app-password", "xoauth2"), default="app-password")
+    commands.add_parser("action-status", help="Mostra lo stato del registro e gli invii da verificare")
+    commands.add_parser("action-reconcile", help="Riconcilia il registro invii dopo una verifica manuale")
+    commands.add_parser("action-pause", help="Sospendi le nuove disiscrizioni POST dell’archivio")
+    commands.add_parser("action-resume", help="Riabilita le nuove approvazioni per le disiscrizioni POST")
+    commands.add_parser("backup", help="Copia l’archivio cifrato in un nuovo file").add_argument("destination", type=Path)
+    commands.add_parser("restore", help="Copia il backup indicato in --db in un nuovo archivio").add_argument(
+        "destination", type=Path)
+    commands.add_parser("export", help="Esporta un riepilogo locale in JSON in chiaro").add_argument(
+        "destination", type=Path)
+    commands.add_parser("rotate-passphrase", help="Sostituisci la passphrase dell’archivio")
+    catalog = commands.add_parser("broker-catalog", help="Consulta il catalogo locale di procedure broker")
+    catalog.add_argument("procedure", nargs="?", metavar="ID")
+    demo = commands.add_parser("multistep-demo", help="Prova l’adattatore su un sito HTTPS locale controllato")
+    demo.add_argument("--port", type=int, required=True)
+    demo.add_argument("--ca", type=Path, required=True, help="Certificato PEM della CA del sito di prova")
     return root
 
 
@@ -353,12 +374,15 @@ def one_click_destination(finding):
 
 
 def execute_one_click(store, finding_id, finding, raw, url):
+    checkpoint = store.review_action(finding_id, finding)
     recipient = input("Indirizzo destinatario di cui hai il controllo: ").strip()
-    verify_message(raw, finding["sender"], recipient)
-    approve({"azione": "POST List-Unsubscribe=One-Click", "mittente_dkim": finding["sender"],
-             "destinazione": url}, "Verifica il mittente e la destinazione prima dell’invio.")
+    verify_message(raw, finding["sender"], recipient, destination=url)
+    preview = {"azione": "POST List-Unsubscribe=One-Click", "mittente_dkim": finding["sender"],
+               "destinatario_verificato": recipient, "destinazione": url}
+    approve(preview, "Verifica il mittente e la destinazione prima dell’invio.")
     ip = resolve_destination(urlsplit(url).hostname)
-    action_id = store.start_action(finding_id, url)
+    action_id = store.start_action(finding_id, url, preview={**preview, "sha256_messaggio": sha256(raw).hexdigest()},
+                                   reviewed_checkpoint=checkpoint, reviewed_finding=finding)
     status = submit(url, ip)
     store.finish_action(action_id, status)
     emit({"id_azione": action_id, "stato": status, "rimozione_verificata": False})
@@ -372,6 +396,7 @@ def unsubscribe(store, finding_id, finding, file):
 
 def unsubscribe_imap(store, finding_id, finding, source_index, method):
     url = one_click_destination(finding)
+    store.review_action(finding_id, finding)
     sources = finding.get("imap_sources", [])
     if source_index is None and len(sources) == 1:
         source_index = 1
@@ -395,10 +420,11 @@ def form_unsubscribe(store, finding_id, finding, index):
     )
     if not url or not is_form_route:
         raise ValueError("Seleziona un canale Web di disiscrizione pertinente e conferma i candidati con confirm-route.")
+    checkpoint = store.review_action(finding_id, finding)
     approve({"azione": "GET", "destinazione": url,
              "soggetto_dichiarato": finding.get("controller") or finding["sender"],
              "provenienza": route.get("source_url", route["kind"])},
-            "Conferma la consultazione. Anche aprire una pagina con un link personale può avere effetti.")
+            "Conferma la lettura iniziale e il ricontrollo del modulo prima del POST. Aprire il link può avere effetti.")
     ip = resolve_destination(urlsplit(url).hostname)
     form = discover_unsubscribe_form(url, fetch_html(url, ip))
     email = getpass.getpass("Tuo indirizzo da disiscrivere: ").strip()
@@ -406,9 +432,19 @@ def form_unsubscribe(store, finding_id, finding, index):
         raise ValueError("Indirizzo email non valido.")
     fields = form.payload(email)
     body = urlencode(fields).encode("ascii")
-    approve({"azione": "POST", "destinazione": form.destination, "pulsante": form.label, "campi": fields},
-            "Controlla destinatario e campi. Conferma l’invio solo per il tuo indirizzo.")
-    action_id = store.start_action(finding_id, form.destination, form_address=email, form_page=url)
+    preview = {"azione": "POST", "destinazione": form.destination, "pulsante": form.label, "campi": fields}
+    approve(preview, "Controlla destinatario e campi. Conferma l’invio solo per il tuo indirizzo.")
+    if store.review_action(finding_id, finding) != checkpoint:
+        raise ValueError("Il registro è cambiato. Genera una nuova anteprima.")
+    try:
+        current_form = discover_unsubscribe_form(url, fetch_html(url, ip))
+    except ValueError:
+        raise ValueError("Impossibile ricontrollare il modulo. Genera una nuova anteprima.") from None
+    if current_form != form:
+        raise ValueError("La procedura è cambiata. Genera una nuova anteprima.")
+    action_id = store.start_action(finding_id, form.destination, form_address=email, form_page=url,
+                                   preview={**preview, "pagina": url, "corpo": body.decode("ascii")},
+                                   reviewed_checkpoint=checkpoint, reviewed_finding=finding)
     status = post_form(form.destination, ip, body)
     store.finish_action(action_id, status)
     emit({"id_azione": action_id, "stato": status, "rimozione_verificata": False})
@@ -417,6 +453,43 @@ def form_unsubscribe(store, finding_id, finding, index):
 
 def run(store, args):
     match args.command:
+        case "action-status":
+            emit({**store.action_status(), "file_registro": str(store.ledger_path)})
+        case "action-reconcile":
+            reviewed = store.action_status()
+            approve(reviewed, "Verifica presso la fonte gli invii possibili dopo la copia, anche se il registro manca. "
+                    "Conferma solo dopo il controllo. Le destinazioni già registrate restano bloccate.")
+            store.reconcile_actions(reviewed)
+            emit(store.action_status())
+        case "action-pause":
+            store.set_actions_paused(True)
+            emit(store.action_status())
+        case "action-resume":
+            approve({"azione": "riabilita le nuove approvazioni POST"},
+                    "Conferma la riattivazione. Ogni invio richiederà una nuova anteprima.")
+            store.set_actions_paused(False)
+            emit(store.action_status())
+        case "backup" | "restore" | "export":
+            description = {
+                "backup": "crea una copia cifrata dell’archivio",
+                "restore": "ripristina in un nuovo file, mantenendo il registro invii sul dispositivo",
+                "export": "scrivi un riepilogo JSON in chiaro. Il file può contenere dati personali",
+            }
+            approve({"operazione": description[args.command], "destinazione": str(args.destination.resolve())},
+                    "Verifica il percorso e chi può accedervi prima di confermare.")
+            if args.command == "export":
+                store.export_to(args.destination)
+            else:
+                store.backup_to(args.destination)
+            emit({"operazione": args.command, "stato": "completata"})
+        case "rotate-passphrase":
+            password = getpass.getpass("Nuova passphrase (almeno 12 caratteri): ")
+            if password != getpass.getpass("Ripeti la nuova passphrase: "):
+                raise ValueError("Le nuove passphrase non coincidono.")
+            approve({"operazione": "sostituisci la passphrase di questo archivio"},
+                    "Le copie esistenti continuano a richiedere la loro passphrase originale.")
+            store.rotate_password(password)
+            emit({"operazione": args.command, "stato": "completata"})
         case "import-eml":
             return import_eml(store, args.path)
         case "import-mbox":
@@ -507,13 +580,23 @@ def run(store, args):
 def main():
     args = parser().parse_args()
     try:
+        if args.command == "broker-catalog":
+            emit(catalog_view(args.procedure))
+            return 0
         if not sys.stdin.isatty():
             raise ValueError("Usa un terminale interattivo per sbloccare l’archivio.")
+        if args.command == "multistep-demo":
+            emit(run_demo(args.port, args.ca, approve))
+            return 0
         if args.command == "search-web":
             lookup_web()
             return 0
+        if args.command in {"backup", "restore", "export", "rotate-passphrase",
+                            "action-status", "action-pause", "action-resume", "action-reconcile"} and not args.db.is_file():
+            raise ValueError("L’archivio indicato non esiste.")
         password = getpass.getpass("Passphrase archivio: ")
-        with closing(Store(args.db, password)) as store:
+        with closing(Store(args.db, password, ledger_dir=data_directory() / "action-state",
+                           readonly=args.command == "restore")) as store:
             return run(store, args)
     except ValueError as exc:
         print(str(exc), file=sys.stderr)

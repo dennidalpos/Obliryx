@@ -55,6 +55,9 @@ class RecheckTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             folder = Path(tmp)
+            password = secrets.token_hex(16)
+            backup = folder / "before-post.sqlite3"
+            restored = folder / "restored.sqlite3"
             server_context, client_context = tls_contexts(folder)
             with ThreadingHTTPServer(("127.0.0.1", 0), Handler) as server:
                 server.socket = server_context.wrap_socket(server.socket, server_side=True)
@@ -68,7 +71,7 @@ class RecheckTests(unittest.TestCase):
                     return connection
 
                 try:
-                    with (closing(Store(folder / "vault.sqlite3", secrets.token_hex(16))) as store,
+                    with (closing(Store(folder / "vault.sqlite3", password)) as store,
                           patch("obliryx.site.resolve_destination", return_value="127.0.0.1"),
                           patch("obliryx.cli.resolve_destination", return_value="127.0.0.1"),
                           patch("obliryx.site.DirectHTTPSConnection", side_effect=connect),
@@ -79,14 +82,31 @@ class RecheckTests(unittest.TestCase):
                             self.assertEqual(run(store, cli.parse_args(["check-page", "email"])), 0)
                         [(finding_id, _)] = list(store.all())
                         run(store, cli.parse_args(["confirm-route", finding_id, "1"]))
+                        run(store, cli.parse_args(["backup", str(backup)]))
                         args = cli.parse_args(["recheck-page", finding_id])
                         with patch("obliryx.cli.getpass.getpass", return_value="different@example.invalid"):
                             with self.assertRaisesRegex(ValueError, "non coincide"):
                                 run(store, args)
                         self.assertEqual(requests, [("GET", "/public")])
                         with patch("obliryx.cli.getpass.getpass", return_value=EMAIL):
-                            self.assertEqual(run(store, cli.parse_args(["form-unsubscribe", finding_id, "1"])), 0)
-                            self.assertEqual(store.actions(finding_id)[0]["status"], "accepted")
+                            send = cli.parse_args(["form-unsubscribe", finding_id, "1"])
+                            self.assertEqual(run(store, send), 0)
+                            [action] = store.actions(finding_id)
+                            self.assertEqual(action["status"], "accepted")
+                            self.assertNotIn(EMAIL.encode(), store.ledger_path.read_bytes())
+                            approval = store.db.execute("SELECT approval FROM actions WHERE id = ?",
+                                                        (action["id"],)).fetchone()[0]
+                            self.assertIn(["address", EMAIL], store._open(action["id"], approval)["campi"])
+                            with closing(Store(backup, password, readonly=True)) as source:
+                                run(source, cli.parse_args(["restore", str(restored)]))
+                            with closing(Store(restored, password)) as recovered:
+                                self.assertEqual(recovered.action_status()["stato"], "da_riconciliare")
+                                with self.assertRaisesRegex(ValueError, "action-reconcile"):
+                                    run(recovered, send)
+                                run(recovered, cli.parse_args(["action-reconcile"]))
+                                self.assertEqual(recovered.actions(finding_id)[0]["status"], "accepted")
+                                with self.assertRaisesRegex(ValueError, "già usata"):
+                                    run(recovered, send)
                             self.assertEqual(run(store, args), 0)
                             phase = "login"
                             self.assertEqual(run(store, args), 1)
@@ -100,8 +120,9 @@ class RecheckTests(unittest.TestCase):
                 finally:
                     server.shutdown()
                     thread.join(timeout=5)
-        self.assertEqual(requests, [("GET", "/public"), ("GET", "/privacy/leave"),
-                                   ("POST", "/privacy/submit"), ("GET", "/public"),
+        self.assertEqual(requests, [("GET", "/public"), ("GET", "/privacy/leave"), ("GET", "/privacy/leave"),
+                                   ("POST", "/privacy/submit"), ("GET", "/privacy/leave"),
+                                   ("GET", "/privacy/leave"), ("GET", "/public"),
                                    ("GET", "/public"), ("GET", "/public")])
 
     def test_legacy_finding_without_page_category_can_be_rechecked(self):

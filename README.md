@@ -1,6 +1,6 @@
 # Obliryx
 
-Obliryx raccoglie in un archivio personale i riscontri di mailing list, marketing ed esposizione dei propri dati. Analizza messaggi `.eml` ed esportazioni `.mbox` della propria posta e consente di aggiungere riscontri Web con la relativa fonte. I messaggi originali restano nei file di partenza. L’archivio SQLite cifra il contenuto dei riscontri, inclusi gli URL di disiscrizione, con una chiave derivata dalla passphrase.
+Obliryx raccoglie in un archivio personale i riscontri di mailing list, marketing ed esposizione dei propri dati. Analizza messaggi `.eml` ed esportazioni `.mbox` della propria posta e consente di aggiungere riscontri Web con la relativa fonte. I messaggi originali restano nei file di partenza. L’archivio SQLite cifra riscontri, URL di disiscrizione e anteprime approvate. Nei nuovi archivi una chiave derivata dalla passphrase protegge le chiavi dei dati e delle impronte.
 
 ## Avvio locale
 
@@ -10,7 +10,7 @@ Su Windows puoi usare il menu PowerShell dalla cartella del progetto:
 .\Avvia-Obliryx.ps1
 ```
 
-Il menu guida importazione, ricerche, revisione dei riscontri, bozze e disiscrizioni. Se l'ambiente Python manca, propone di creare `.venv` e installare le dipendenze. Passphrase, chiavi API e credenziali vengono richieste direttamente da Obliryx durante l'operazione. Le azioni esterne mantengono le conferme della CLI. Usa `0` per tornare indietro e `q` per annullare l'inserimento di un parametro.
+Il menu guida importazione, ricerche, revisione dei riscontri, bozze e disiscrizioni. Da **Archivio e ambiente Python** puoi anche gestire il registro invii, le copie e la passphrase. Se l'ambiente Python manca, il launcher propone di creare `.venv` e installare le dipendenze. Passphrase, chiavi API e credenziali vengono richieste direttamente da Obliryx durante l'operazione. Usa `0` per tornare indietro e `q` per annullare l'inserimento di un parametro.
 
 Puoi scegliere un archivio per la sessione dal menu o con `-DatabasePath "D:\Dati personali\obliryx.sqlite3"`. Il parametro `-PythonPath` permette di usare il percorso di un interprete Python già configurato. Il launcher funziona con Windows PowerShell 5.1 e PowerShell 7.
 
@@ -59,17 +59,59 @@ Usa esportazioni MBOX con separatori `From ` e messaggi fino a 5 MiB. Le revisio
 
 `scan-mail` confronta letteralmente il valore dopo aver normalizzato maiuscole, Unicode e spazi. Cerca nell’oggetto e nei primi 200.000 caratteri di ciascuna parte testuale supportata. Esclude intestazioni dei destinatari, allegati, script e stili. Nel riscontro aggiunge categoria e posizione, senza aggiungere estratti del testo o salvare il valore di ricerca come campo. Omette l’oggetto se contiene la corrispondenza. Una corrispondenza attesta la presenza nel messaggio analizzato. Il contenuto può provenire da citazioni, inoltri o firme, quindi la verifica del contesto resta necessaria.
 
-`form-unsubscribe` supporta un modulo HTML statico con un campo email, un pulsante di disiscrizione riconoscibile ed eventuali campi nascosti. Invia un POST HTTPS alla stessa origine e non esegue script, invia cookie o segue redirect. Usa il browser per flussi con login, CAPTCHA, JavaScript, campi aggiuntivi o passaggi multipli. L’esito tecnico dell’invio è registrato separatamente dalla rimozione, che puoi annotare con `outcome`. Il flusso è stato verificato su un server HTTPS locale di prova. [HTML Standard, invio dei moduli](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm)
+`form-unsubscribe` supporta un modulo HTML statico con un campo email, un pulsante di disiscrizione riconoscibile ed eventuali campi nascosti. Dopo l’approvazione rilegge il modulo con la stessa destinazione di rete. Se la destinazione, il pulsante o i campi sono cambiati, chiede di ripartire da una nuova anteprima. Invia un POST HTTPS alla stessa origine e non esegue script, invia cookie o segue redirect. Usa il browser per flussi con login, CAPTCHA, JavaScript, campi aggiuntivi o passaggi multipli. L’esito tecnico dell’invio è registrato separatamente dalla rimozione, che puoi annotare con `outcome`. Il flusso è stato verificato su un server HTTPS locale di prova. [HTML Standard, invio dei moduli](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#form-submission-algorithm)
 
 Dopo una richiesta, usa `recheck-page` per osservare di nuovo la fonte. `dato_non_osservato` vale per il testo accessibile della pagina in quel momento. Errori e schermate di accesso vengono registrati come `non_verificabile`. `ricomparsa` indica che il dato è stato visto di nuovo dopo un controllo valido in cui era assente. `show` espone lo storico dei ricontrolli e `list` mostra l’ultimo esito. Le risposte del titolare rimangono registrabili con `outcome`.
 
 Usa il nome del server IMAP indicato dal tuo provider. Obliryx verifica il certificato TLS sulla porta 993 e apre `INBOX` o la cartella ASCII indicata con `--mailbox` in sola lettura. Legge fino a 500 messaggi recenti per sessione e salta quelli oltre 5 MiB. Inserisci una password per app oppure, con `--auth xoauth2`, un token IMAP già ottenuto dal provider. Le credenziali restano in memoria per la sessione. I loro permessi dipendono dal provider. Per esempio, Gmail richiede lo scope `https://mail.google.com/` per IMAP. Obliryx conserva nel riscontro un riferimento IMAP cifrato per ritrovare il messaggio. Se l’identità della cartella cambia o il messaggio non corrisponde al riscontro, il one-click si interrompe. La modalità è stata collaudata su un server IMAP TLS locale. [RFC 9051](https://www.rfc-editor.org/rfc/rfc9051.html) · [Gmail, XOAUTH2](https://developers.google.com/workspace/gmail/imap/xoauth2-protocol)
 
+## Catalogo broker per Italia e UE
+
+`obliryx broker-catalog` elenca le procedure e `obliryx broker-catalog liveramp-accesso-it` mostra una scheda. La consultazione è locale e funziona senza sbloccare un archivio. La prima versione contiene dieci procedure manuali di accesso o opt-out pubblicitario. Le schede includono il paese o l’area di applicabilità, il titolare, la fonte ufficiale, il canale, i dati previsti e l’effetto dichiarato. La presenza nel catalogo lascia `holding_state` a `unknown`. I destinatari e gli effetti dipendono dalla procedura scelta, per esempio contatto privacy per i residenti in Italia o preferenza pubblicitaria del singolo browser. [LiveRamp, contatti privacy](https://liveramp.com/privacy) · [Adform, opt-out](https://site.adform.com/privacy-center/platform-privacy/opt-out/)
+
+Il file `obliryx/broker_procedures.json` distribuisce schede originali sotto licenza MIT. Ogni scheda rimanda alla pagina del titolare e riporta la data della revisione documentale. Se cambiano destinatario, campi o effetto, verifica nuovamente la fonte e aggiorna versione, data e `review_sha256` con `review_fingerprint` da `obliryx.broker_catalog`. Una scheda modificata con la vecchia impronta viene rifiutata. Usa i canali indicati manualmente dopo aver verificato la pertinenza della procedura.
+
+### Adattatore multistep di prova
+
+`obliryx multistep-demo --port PORTA --ca CA.pem` usa il protocollo dimostrativo `obliryx-demo-v1` sul sito HTTPS locale. Verifica il certificato con la CA di prova fornita e chiede conferme distinte per aprire la sessione, preparare la richiesta sintetica e confermarla. Cookie e token rimangono in memoria e il cookie viene inviato solo al sito locale. Chromium, in un contesto temporaneo offline, ispeziona HTML inerte per controllare i due moduli previsti. Il flusso si ferma se il contratto cambia o se il sito richiede un passaggio assistito, come CAPTCHA, accesso o documenti. I broker del catalogo mantengono i loro canali manuali.
+
+Per riprodurre il collaudo con Chromium e il server HTTPS sintetico avviato dai test:
+
+```powershell
+python -m pip install -e ".[demo]"
+python -m playwright install chromium
+python -m unittest discover -s tests -p "test_multistep_demo.py" -v
+```
+
+## Archivio, copie e recupero
+
+| Comando | Operazione |
+|---|---|
+| `obliryx backup COPIA.sqlite3` | Crea una copia coerente di SQLite con gli stessi dati cifrati e la stessa passphrase dell’archivio al momento della copia. |
+| `obliryx --db COPIA.sqlite3 restore NUOVO.sqlite3` | Sblocca la copia con la sua passphrase e ripristina in un file nuovo. Poi seleziona `NUOVO.sqlite3` con `--db` o dal menu. |
+| `obliryx export RIEPILOGO.json` | Esporta in chiaro identificativi dei riscontri, mittente o organizzazione, categorie, stati, esiti e storico tecnico. Il riepilogo omette URL, note libere, credenziali e dati delle anteprime. |
+| `obliryx rotate-passphrase` | Richiede la passphrase corrente e due inserimenti della nuova. Cambia la protezione delle chiavi esistenti, preservando la lettura dei record e le deduplicazioni. |
+| `obliryx action-status` | Mostra se gli invii sono sospesi, il percorso del registro separato e gli esiti incerti o da riconciliare. |
+| `obliryx action-reconcile` | Dopo la verifica manuale, riallinea archivio e registro e recupera gli esiti per i riscontri ancora presenti. Le destinazioni già registrate restano bloccate, inclusi gli esiti incerti. |
+| `obliryx action-pause` / `obliryx action-resume` | Sospende nuove prenotazioni POST e invalida le anteprime in corso. La riattivazione richiede conferma e ogni nuovo invio parte da una nuova anteprima. Un POST già prenotato può essere in corso. |
+
+Backup, ripristino ed esportazione richiedono conferma del percorso e usano solo destinazioni nuove in cartelle già esistenti. Il registro invii è sotto `action-state` nella cartella dati predefinita dell’utente, anche con `--db`. La copia dell’archivio esclude questo registro. Obliryx registra l’approvazione cifrata e riserva la destinazione prima del POST, con una transazione SQLite tra archivio e registro. Un’interruzione prima della risposta lascia un esito incerto. La protezione vale per le disiscrizioni POST eseguite da Obliryx. L’apertura di un link nel browser e l’invio dal client di posta hanno conferme separate. [SQLite, transazioni su database allegati](https://www.sqlite.org/lang_attach.html)
+
+Prima di usare un archivio ripristinato, esegui `action-status`. Se il registro manca o diverge, confronta i tentativi disponibili con ricevute e riscontri alla fonte prima di confermare `action-reconcile`. Lo stesso controllo serve al primo uso degli invii su archivi creati con versioni precedenti. Quando manca il registro, il programma dispone soltanto dello storico presente nella copia e la verifica manuale deve coprire anche gli invii successivi. Conserva il registro attuale sul dispositivo e usa una sola copia dell’archivio per il lavoro corrente. La protezione presuppone che il sistema e il registro locale siano affidabili. Ripristinare insieme archivio e registro da copie coordinate ma obsolete può rendere invisibili gli invii più recenti.
+
+### Accesso ai file e retention
+
+- Tieni archivio, registro, copie ed esportazioni in cartelle private e usa la cifratura del volume per i supporti rimovibili. Su Windows i file ereditano le autorizzazioni della cartella. Controllale nelle proprietà di sicurezza prima di esportare. Su Unix i nuovi file sono creati con permessi al massimo `0600`.
+- I file SQLite conservano in chiaro metadati operativi come date, stati e identificativi interni. Il terminale può mostrare destinatari, URL e campi durante le anteprime. Proteggi sessioni e trascrizioni. La cifratura dei record presuppone una passphrase robusta e un host affidabile durante lo sblocco.
+- Le copie esistenti continuano ad aprirsi con la passphrase che avevano quando sono state create. La rotazione cambia la passphrase del file corrente e conserva le chiavi dei dati. Se qualcuno ha ottenuto quelle chiavi da una copia precedente, la rotazione della sola passphrase non le sostituisce.
+- Definisci per quanto tempo tenere ogni backup ed export. Prima di rimuoverli, chiudi Obliryx, inventaria i percorsi e le copie sincronizzate, controlla gli hash e verifica almeno un ripristino delle copie che vuoi conservare. Conferma esplicitamente i file da eliminare prima di rimuoverli con gli strumenti del sistema operativo.
+- Per dismettere l’intero archivio, sospendi i POST e includi nell’inventario archivio, copie, esportazioni e file temporanei correlati. Conserva il registro invii finché una copia può essere riaperta. Rimuovilo solo dopo aver confermato la dismissione di tutte le copie. Gestisci separatamente file originali, cestino, versioni cloud e richieste presso i provider. La rimozione di un file dal filesystem lascia la cancellazione fisica al supporto e alle sue politiche di retention.
+
 ## Stato di sviluppo
 
 La ricerca Web mostra candidati. Usa `record` solo dopo aver verificato indipendentemente il riscontro alla fonte. I risultati del motore non vengono scritti nell’archivio e le chiavi dei provider vengono richieste a ogni uso. HIBP riporta associazioni con raccolte note al provider. Le categorie riportate per l’intero incidente non provano che ogni categoria fosse presente nel tuo record. [Brave, termini dell’API](https://api-dashboard.search.brave.com/documentation/resources/terms-of-service) · [Have I Been Pwned, documentazione e attribuzione](https://haveibeenpwned.com/API/v3)
 
-`check-page` controlla una pagina per volta e usa il testo disponibile nel documento HTML. Contenuti dinamici, accessi protetti e redirect richiedono verifica manuale. I link individuati restano candidati da controllare. Il monitoraggio continuo lavora sulla cartella `.eml` scelta durante la sessione. L’accesso IMAP avviene su richiesta e l’autenticazione disponibile dipende dal provider. Il flusso one-click è collaudato con simulazioni e messaggi sintetici firmati. Prima di un ripristino riconcilia le azioni successive alla copia. Una copia precedente può aver perso la registrazione di un invio già eseguito.
+`check-page` controlla una pagina per volta e usa il testo disponibile nel documento HTML. Contenuti dinamici, accessi protetti e redirect richiedono verifica manuale. I link individuati restano candidati da controllare. Il monitoraggio continuo lavora sulla cartella `.eml` scelta durante la sessione. L’accesso IMAP avviene su richiesta e l’autenticazione disponibile dipende dal provider. Il flusso one-click è collaudato con simulazioni e messaggi sintetici firmati.
 
 Codice distribuito con [licenza MIT](LICENSE).
 

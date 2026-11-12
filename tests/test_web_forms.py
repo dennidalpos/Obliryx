@@ -32,7 +32,7 @@ FORM = (b'<form method="post" action="/privacy/submit">'
         b'<button name="action" value="remove">Disiscriviti</button></form>')
 
 
-def tls_contexts(folder, host=HOST):
+def tls_contexts(folder, host=HOST, *, ca_file=None):
     current = datetime.now(UTC)
     issuer = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, "Obliryx Test CA")])
     subject = x509.Name([x509.NameAttribute(NameOID.COMMON_NAME, host)])
@@ -55,11 +55,14 @@ def tls_contexts(folder, host=HOST):
     cert_file = folder / "test-server.pem"
     key_file = folder / "test-server-key.pem"
     cert_file.write_bytes(leaf.public_bytes(serialization.Encoding.PEM))
+    ca_pem = ca.public_bytes(serialization.Encoding.PEM)
+    if ca_file is not None:
+        ca_file.write_bytes(ca_pem)
     key_file.write_bytes(leaf_key.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,
                                                serialization.NoEncryption()))
     server_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     server_context.load_cert_chain(cert_file, key_file)
-    return server_context, ssl.create_default_context(cadata=ca.public_bytes(serialization.Encoding.PEM).decode())
+    return server_context, ssl.create_default_context(cadata=ca_pem.decode())
 
 
 class UnsubscribeFormTests(unittest.TestCase):

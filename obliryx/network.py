@@ -14,8 +14,8 @@ def resolve_destination(host):
 
 
 class DirectHTTPSConnection(http.client.HTTPSConnection):
-    def __init__(self, host, ip):
-        super().__init__(host, timeout=10, context=ssl.create_default_context())
+    def __init__(self, host, ip, *, port=443, context=None):
+        super().__init__(host, port=port, timeout=10, context=context or ssl.create_default_context())
         self.ip = ip
 
     def connect(self):

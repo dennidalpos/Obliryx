@@ -64,6 +64,9 @@ function Read-OperationField {
                 }
                 Write-Host 'Il percorso indicato non esiste o ha un tipo diverso da quello richiesto.' -ForegroundColor Yellow
             }
+            'OutputPath' {
+                return $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($value.Trim('"'))
+            }
             'Guid' {
                 $id = [guid]::Empty
                 if ([guid]::TryParse($value, [ref]$id)) { return $id.ToString() }
@@ -161,6 +164,7 @@ $script:Fields = @{
     Eml = @{Prompt = 'File .eml o cartella con file .eml'; Kind = 'Path'; PathType = 'Any'}
     File = @{Prompt = 'File .mbox'; Kind = 'Path'; PathType = 'Leaf'}
     Original = @{Prompt = 'File originale .eml o archivio .mbox'; Kind = 'Path'; PathType = 'Leaf'}
+    Destination = @{Prompt = 'Percorso del nuovo file'; Kind = 'OutputPath'}
     Directory = @{Prompt = 'Cartella con file .eml'; Kind = 'Path'; PathType = 'Container'}
     Category = @{Prompt = 'Categoria del tuo dato'; Choices = $categories}
     Host = @{Prompt = 'Server IMAP ufficiale del provider'; Kind = 'Text'}
@@ -234,7 +238,15 @@ $menus = @(
     @{Label = 'Archivio e ambiente Python'; Items = @(
         @{Label = 'Scegli l''archivio per questa sessione'; Action = 'Database'},
         @{Label = 'Installa o aggiorna l''ambiente locale .venv'; Action = 'Install'},
-        @{Label = 'Mostra la guida dei comandi'; Command = '--help'; Fields = @()}
+        @{Label = 'Mostra la guida dei comandi'; Command = '--help'; Fields = @()},
+        @{Label = 'Mostra lo stato del registro invii'; Command = 'action-status'; Fields = @()},
+        @{Label = 'Sospendi i nuovi invii POST'; Command = 'action-pause'; Fields = @()},
+        @{Label = 'Riabilita le nuove approvazioni POST'; Command = 'action-resume'; Fields = @()},
+        @{Label = 'Riconcilia il registro invii dopo la verifica'; Command = 'action-reconcile'; Fields = @()},
+        @{Label = 'Crea un backup cifrato'; Command = 'backup'; Fields = @('Destination')},
+        @{Label = 'Ripristina il backup selezionato in un nuovo file'; Command = 'restore'; Fields = @('Destination')},
+        @{Label = 'Esporta il riepilogo JSON in chiaro'; Command = 'export'; Fields = @('Destination')},
+        @{Label = 'Cambia la passphrase'; Command = 'rotate-passphrase'; Fields = @()}
     )}
 )
 

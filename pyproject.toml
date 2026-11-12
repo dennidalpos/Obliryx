@@ -12,8 +12,14 @@ license-files = ["LICENSE"]
 requires-python = ">=3.11"
 dependencies = ["cryptography>=46", "dkimpy>=1.1.8", "dnspython>=2.8"]
 
+[project.optional-dependencies]
+demo = ["playwright>=1.48,<2"]
+
 [project.scripts]
 obliryx = "obliryx.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["obliryx*"]
+
+[tool.setuptools.package-data]
+obliryx = ["broker_procedures.json"]

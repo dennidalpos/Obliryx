@@ -276,6 +276,9 @@ class SignedMessage(unittest.TestCase):
 
         with patch.object(dkim.DKIM, "verify", verify_locally):
             verify_message(signed, "newsletter@example.invalid", "reader@example.invalid")
+            with self.assertRaisesRegex(ValueError, "destinazione"):
+                verify_message(signed, "newsletter@example.invalid", "reader@example.invalid",
+                               destination="https://example.invalid/different")
             with self.assertRaisesRegex(ValueError, "Firma DKIM"):
                 verify_message(signed.replace(b"token=synthetic", b"token=tampered"),
                                "newsletter@example.invalid", "reader@example.invalid")
