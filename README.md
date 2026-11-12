@@ -63,7 +63,7 @@ La ricerca Web mostra candidati. Usa `record` solo dopo aver verificato indipend
 
 Codice distribuito con [licenza MIT](LICENSE).
 
-Il workflow GitHub Actions è configurato per verificare installazione e test con Python 3.11 e 3.15 su Windows, Linux e macOS. Il collaudo locale su Windows ha superato 27 test su entrambe le versioni. Le esecuzioni GitHub sulle altre piattaforme restano da verificare. I test usano dati sintetici e server di prova locali per IMAP e disiscrizioni.
+Il workflow GitHub Actions verifica installazione e test con Python 3.11 e 3.15 su Windows, Linux e macOS. Il primo collaudo pubblico ha superato 27 test su ciascuna delle sei combinazioni. I test usano dati sintetici e server di prova locali per IMAP e disiscrizioni. [Esito CI del primo commit](https://github.com/dennidalpos/Obliryx/actions/runs/43268081275)
 
 Per eseguire le prove locali dopo l’installazione:
 
