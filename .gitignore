@@ -1,0 +1,11 @@
+.venv/
+.local/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.env
+*.eml
+*.mbox
+*.sqlite3*

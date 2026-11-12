@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "obliryx"
+version = "0.1.0.dev0"
+description = "Archivio locale per riscontri di privacy e disiscrizioni controllate"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+dependencies = ["cryptography>=46", "dkimpy>=1.1.8", "dnspython>=2.8"]
+
+[project.scripts]
+obliryx = "obliryx.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["obliryx*"]
