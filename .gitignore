@@ -9,3 +9,8 @@ dist/
 *.eml
 *.mbox
 *.sqlite3*
+.desktop-work/
+frontend/node_modules/
+frontend/dist/
+.impeccable/review/
+.impeccable/mocks/

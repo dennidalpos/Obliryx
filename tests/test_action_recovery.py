@@ -38,10 +38,10 @@ def interrupt_in_process(path, finding_id, url, receipt):
             receipt.write_text(destination, encoding="utf-8")
         os._exit(9)
 
-    with (closing(Store(path, TEST_PHRASE)) as store, patch("obliryx.cli.verify_message"),
-          patch("obliryx.cli.approve"), patch("builtins.input", return_value=EMAIL),
-          patch("obliryx.cli.resolve_destination", return_value="203.0.113.1"),
-          patch("obliryx.cli.submit", side_effect=submit)):
+    with (closing(Store(path, TEST_PHRASE)) as store, patch("obliryx.services.verify_message"),
+          patch("obliryx.services.approve"), patch("builtins.input", return_value=EMAIL),
+          patch("obliryx.services.resolve_destination", return_value="203.0.113.1"),
+          patch("obliryx.services.submit", side_effect=submit)):
         execute_one_click(store, finding_id, store.get(finding_id), MESSAGE, url)
 
 
@@ -72,10 +72,10 @@ class ActionRecoveryTests(unittest.TestCase):
                         worker.terminate()
                         worker.join(timeout=5)
                     worker.close()
-                with (patch("obliryx.cli.verify_message"), patch("obliryx.cli.approve"),
+                with (patch("obliryx.services.verify_message"), patch("obliryx.services.approve"),
                       patch("builtins.input", return_value=EMAIL),
-                      patch("obliryx.cli.resolve_destination", return_value="203.0.113.1"),
-                      patch("obliryx.cli.submit") as send,
+                      patch("obliryx.services.resolve_destination", return_value="203.0.113.1"),
+                      patch("obliryx.services.submit") as send,
                       closing(Store(self.db, TEST_PHRASE)) as reopened):
                     self.assertEqual(reopened.actions(self.finding_id)[-1]["status"], "delivery_unknown")
                     with self.assertRaisesRegex(ValueError, "già usata"):
@@ -117,11 +117,11 @@ class ActionRecoveryTests(unittest.TestCase):
                 self.assertTrue(other.action_status()["sospeso"])
                 other.set_actions_paused(False)
 
-            with (patch("obliryx.cli.verify_message"),
-                  patch("obliryx.cli.approve", side_effect=change_pause),
+            with (patch("obliryx.services.verify_message"),
+                  patch("obliryx.services.approve", side_effect=change_pause),
                   patch("builtins.input", return_value=EMAIL),
-                  patch("obliryx.cli.resolve_destination", return_value="203.0.113.1"),
-                  patch("obliryx.cli.submit") as send):
+                  patch("obliryx.services.resolve_destination", return_value="203.0.113.1"),
+                  patch("obliryx.services.submit") as send):
                 with self.assertRaisesRegex(ValueError, "nuova anteprima"):
                     execute_one_click(self.store, self.finding_id, self.finding, MESSAGE, ROUTE)
                 send.assert_not_called()
@@ -159,9 +159,9 @@ class ActionRecoveryTests(unittest.TestCase):
                          (b"Disiscriviti", b"Unsubscribe")):
             with (self.subTest(new=new), patch("builtins.input", return_value="CONFERMO"),
                   patch("obliryx.cli.getpass.getpass", return_value=EMAIL),
-                  patch("obliryx.cli.resolve_destination", return_value="203.0.113.1"),
-                  patch("obliryx.cli.fetch_html", side_effect=[FORM.decode(), FORM.replace(old, new).decode()]),
-                  patch("obliryx.cli.post_form") as send, redirect_stdout(io.StringIO())):
+                  patch("obliryx.services.resolve_destination", return_value="203.0.113.1"),
+                  patch("obliryx.services.fetch_html", side_effect=[FORM.decode(), FORM.replace(old, new).decode()]),
+                  patch("obliryx.services.post_form") as send, redirect_stdout(io.StringIO())):
                 with self.assertRaisesRegex(ValueError, "procedura è cambiata"):
                     run(self.store, self.parse(["form-unsubscribe", self.finding_id, "1"]))
                 send.assert_not_called()

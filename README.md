@@ -4,6 +4,8 @@ Obliryx raccoglie in un archivio personale i riscontri di mailing list, marketin
 
 ## Avvio locale
 
+È disponibile anche il progetto dell’**app desktop Windows**, con interfaccia React incorporata, archivio locale e conferme individuali. Per creare l’installer di sviluppo: `scripts/build-desktop.ps1` (Python 3.13 x64, Node 22 LTS, Inno Setup 6). Il dispositivo dell’utente non richiede Python. Vedi [guida desktop e distribuzione](docs/desktop.md), [copertura delle funzioni](docs/desktop-coverage.md) e [verifiche e limiti](docs/desktop-validation.md). La build di sviluppo non firmata non è una release pubblica qualificata.
+
 Su Windows puoi usare il menu PowerShell dalla cartella del progetto:
 
 ```powershell

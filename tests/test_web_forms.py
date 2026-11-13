@@ -131,7 +131,7 @@ class UnsubscribeFormTests(unittest.TestCase):
 
                 try:
                     with (closing(Store(folder / "vault.sqlite3", secrets.token_hex(16))) as store,
-                          patch("obliryx.cli.resolve_destination", return_value="127.0.0.1"),
+                          patch("obliryx.services.resolve_destination", return_value="127.0.0.1"),
                           patch("obliryx.site.DirectHTTPSConnection", side_effect=connect),
                           patch("obliryx.network.DirectHTTPSConnection", side_effect=connect),
                           patch("obliryx.cli.getpass.getpass", return_value=EMAIL),

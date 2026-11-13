@@ -102,8 +102,8 @@ class ImapTests(unittest.TestCase):
                           patch("obliryx.imap_source.BoundedIMAP", side_effect=connect),
                           patch("socket.getaddrinfo", side_effect=resolve),
                           patch.object(dkim.DKIM, "verify", verify_locally),
-                          patch("obliryx.cli.resolve_destination", return_value="203.0.113.1"),
-                          patch("obliryx.cli.submit", return_value="accepted") as send):
+                          patch("obliryx.services.resolve_destination", return_value="203.0.113.1"),
+                          patch("obliryx.services.submit", return_value="accepted") as send):
                         finding_id, _ = store.save(analyze_email(signed), b"eml\x00" + signed)
                         store.update(finding_id, enrollment="non_riconosciuta")
                         cli = parser()

@@ -39,12 +39,12 @@ class LocalWorkflow(unittest.TestCase):
                 args = parser().parse_args(["identify", finding_id])
                 inputs = ["Example News", "https://example.invalid/privacy", "Informativa della lista Example News"]
                 with (patch("builtins.input", side_effect=[*inputs, "CONFERMO"]),
-                      patch("obliryx.cli.inspect_page", return_value=(False, [])), redirect_stdout(io.StringIO())):
+                      patch("obliryx.services.inspect_page", return_value=(False, [])), redirect_stdout(io.StringIO())):
                     with self.assertRaisesRegex(ValueError, "denominazione non compare"):
                         run(store, args)
                 self.assertNotIn("controller_reviews", store.get(finding_id))
                 with (patch("builtins.input", side_effect=[*inputs, "CONFERMO", "CONFERMO"]),
-                      patch("obliryx.cli.inspect_page", return_value=(True, [])) as inspect,
+                      patch("obliryx.services.inspect_page", return_value=(True, [])) as inspect,
                       redirect_stdout(io.StringIO())):
                     run(store, args)
                     inspect.assert_called_once_with("https://example.invalid/privacy", "Example News")
@@ -66,7 +66,7 @@ class LocalWorkflow(unittest.TestCase):
                          "source_url": "https://example.invalid/"}
                 cli = parser()
                 with (patch("builtins.input", side_effect=["https://example.invalid/", "CONFERMO"]),
-                      patch("obliryx.cli.discover_routes", return_value=[route]) as discover,
+                      patch("obliryx.services.discover_routes", return_value=[route]) as discover,
                       redirect_stdout(io.StringIO())):
                     run(store, cli.parse_args(["find-routes", finding_id]))
                     discover.assert_called_once_with("https://example.invalid/")
@@ -228,10 +228,10 @@ class LocalWorkflow(unittest.TestCase):
             finding = analyze_email(MESSAGE)
             with closing(Store(db, TEST_PHRASE)) as store:
                 finding_id, _ = store.save(finding, b"eml\x00" + MESSAGE)
-                with (patch("obliryx.cli.verify_message"), patch("obliryx.cli.approve"),
+                with (patch("obliryx.services.verify_message"), patch("obliryx.services.approve"),
                       patch("builtins.input", return_value="reader@example.invalid"),
-                      patch("obliryx.cli.resolve_destination", return_value="203.0.113.1"),
-                      patch("obliryx.cli.submit", return_value="delivery_unknown") as send,
+                      patch("obliryx.services.resolve_destination", return_value="203.0.113.1"),
+                      patch("obliryx.services.submit", return_value="delivery_unknown") as send,
                       redirect_stdout(io.StringIO())):
                     self.assertEqual(unsubscribe(store, finding_id, finding, eml), 1)
                     send.assert_called_once()
@@ -299,8 +299,8 @@ class SignedMessage(unittest.TestCase):
             inbox.write_bytes(MBOX_SEPARATOR + signed.replace(b"\r\n", b"\n") + b"\n")
             with (closing(Store(folder / "vault.sqlite3", TEST_PHRASE)) as store,
                   patch.object(dkim.DKIM, "verify", verify_locally),
-                  patch("obliryx.cli.resolve_destination", return_value="203.0.113.1"),
-                  patch("obliryx.cli.submit", return_value="accepted") as send,
+                  patch("obliryx.services.resolve_destination", return_value="203.0.113.1"),
+                  patch("obliryx.services.submit", return_value="accepted") as send,
                   patch("builtins.input", side_effect=["reader@example.invalid", "CONFERMO"]),
                   redirect_stdout(io.StringIO())):
                 cli = parser()

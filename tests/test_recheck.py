@@ -73,7 +73,7 @@ class RecheckTests(unittest.TestCase):
                 try:
                     with (closing(Store(folder / "vault.sqlite3", password)) as store,
                           patch("obliryx.site.resolve_destination", return_value="127.0.0.1"),
-                          patch("obliryx.cli.resolve_destination", return_value="127.0.0.1"),
+                          patch("obliryx.services.resolve_destination", return_value="127.0.0.1"),
                           patch("obliryx.site.DirectHTTPSConnection", side_effect=connect),
                           patch("obliryx.network.DirectHTTPSConnection", side_effect=connect),
                           patch("builtins.input", return_value="CONFERMO"), redirect_stdout(io.StringIO())):
@@ -132,6 +132,6 @@ class RecheckTests(unittest.TestCase):
                                              "data_types": ["telefono"]}, page_identity(PUBLIC_PAGE, "email", EMAIL.upper()))
                 with (patch("obliryx.cli.getpass.getpass", return_value=EMAIL.upper()),
                       patch("builtins.input", return_value="CONFERMO"),
-                      patch("obliryx.cli.inspect_page", return_value=(False, [])), redirect_stdout(io.StringIO())):
+                      patch("obliryx.services.inspect_page", return_value=(False, [])), redirect_stdout(io.StringIO())):
                     self.assertEqual(run(store, parser().parse_args(["recheck-page", finding_id])), 0)
                 self.assertEqual(store.get(finding_id)["web_checks"][0]["status"], "dato_non_osservato")
