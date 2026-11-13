@@ -8,6 +8,17 @@ export type Status = {unlocked: boolean; path: string | null; job: Job};
 export type Boot = {version: string; default_path: string; operations: Operation[]};
 
 type Bridge = {
+  workflow_open(): Promise<Reply<WorkflowState>>;
+  workflow_status(): Promise<Reply<WorkflowState>>;
+  workflow_analyze(values: Record<string, string>): Promise<Reply<{started: boolean}>>;
+  workflow_inspect(url: string): Promise<Reply<{started: boolean}>>;
+  workflow_plan(selected: string[]): Promise<Reply<ActionPlan>>;
+  workflow_edit_selection(): Promise<Reply<null>>;
+  workflow_execute(id: string): Promise<Reply<{started: boolean}>>;
+  workflow_respond(request: string, answer: string): Promise<Reply<null>>;
+  workflow_cancel(): Promise<Reply<null>>;
+  workflow_link(id: string): Promise<Reply<null>>;
+  workflow_browser(): Promise<Reply<null>>;
   bootstrap(): Promise<Reply<Boot>>;
   unlock(path: string, password: string, create: boolean, repeated: string): Promise<Reply<{path: string; created: boolean}>>;
   status(): Promise<Reply<Status>>;
@@ -20,6 +31,23 @@ type Bridge = {
   touch(): Promise<Reply<null>>;
   choose_path(mode: string): Promise<Reply<string | null>>;
 };
+
+export type WebItem = {id: string; kind: 'presence' | 'broker'; title: string; url: string; status: string; reason: string; effect: string; mode: string; checked_at: string; matches: {category: string; masked: string}[]; browser_only?: boolean};
+export type WebSource = {id: string; title: string; status: string; reason: string; masked: string; url: string; policy_url?: string};
+export type WebAction = {id: string; title: string; url: string; destination: string; channel: string; effect: string; mode: string; fields: Record<string, string>; status: string; browser_only?: boolean; reason?: string; removal_verified?: boolean};
+export type ActionPlan = {id: string; actions: WebAction[]};
+export type WorkflowState = {unlocked?: boolean; phase: string; busy: boolean; message: string; sources: WebSource[]; items: WebItem[]; operations: WebAction[]; assistance: {request_id: string; id: string; title: string; domain: string; url: string} | null; history: {id: string; title: string; checked_at: string; status: string; actions: {status: string}[]}[]; error: string | null; processed: number; total: number};
+
+export const workflowLabels: Record<string, string> = {
+  unavailable: 'Non disponibile', blocked: 'Verifica richiesta', incomplete: 'Ricerca incompleta', complete: 'Consultata', searching: 'Ricerca in corso',
+  observed: 'Testo corrispondente trovato', not_observed: 'Dato non osservato nella pagina', holding_unknown: 'Possesso non verificato',
+  pending: 'In coda', checking: 'Controllo della procedura', queued_verification: 'Verifica accodata', awaiting_user: 'In attesa di te',
+  approval_invalidated: 'Serve una nuova approvazione', manual: 'Procedura manuale', manual_review: 'Passaggio manuale concluso',
+  skipped: 'Saltata', accepted: 'Richiesta accettata · rimozione da verificare', delivery_unknown: 'Esito incerto · nessun nuovo tentativo automatico',
+};
+export function workflowStep(phase: string) {
+  return ({input: 0, analysis: 1, results: 2, approval: 3, execution: 4, done: 4} as Record<string, number>)[phase] ?? 0;
+}
 declare global { interface Window { pywebview?: {api: Bridge} } }
 
 export async function api<K extends keyof Bridge>(method: K, ...args: Parameters<Bridge[K]>): Promise<Awaited<ReturnType<Bridge[K]>> extends Reply<infer T> ? T : never> {

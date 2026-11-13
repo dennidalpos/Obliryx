@@ -2,6 +2,18 @@
 
 Obliryx raccoglie in un archivio personale i riscontri di mailing list, marketing ed esposizione dei propri dati. Analizza messaggi `.eml` ed esportazioni `.mbox` della propria posta e consente di aggiungere riscontri Web con la relativa fonte. I messaggi originali restano nei file di partenza. L’archivio SQLite cifra riscontri, URL di disiscrizione e anteprime approvate. Nei nuovi archivi una chiave derivata dalla passphrase protegge le chiavi dei dati e delle impronte.
 
+## Percorso desktop: ricerca Web e interventi
+
+L’app Windows si apre direttamente sull’inserimento di email, telefono, nome e cognome o username, con città facoltativa. Non richiede di importare la posta, creare un archivio o scegliere una password: lo storico cifrato è aperto con una credenziale casuale protetta per l’account Windows tramite DPAPI. La CLI conserva le proprie funzioni e la passphrase degli archivi precedenti.
+
+Il percorso ha cinque fasi: **dati → analisi → selezione → riepilogo approvato → interventi**. Le ricerche automatiche gratuite riguardano i profili pubblici GitHub (email, nome, username) e Wikipedia italiana (identificativi inseriti). Nessuna chiave API, abbonamento o ricerca della posta. Gli identificativi cercati vengono comunicati a queste fonti dopo l’avvio dell’analisi; non vengono salvati come campi di ricerca. Sono consultati al massimo cinque candidati per ricerca e venti pagine per sessione. Una corrispondenza viene segnalata soltanto dopo il confronto con il testo visibile della pagina nel browser integrato, separato dal bridge dell’app.
+
+Queste fonti hanno una copertura limitata ai propri contenuti: **non costituiscono una scansione dell’intero Web o dei database privati dei broker**. DuckDuckGo è disponibile tramite link nel browser esterno: la sua [acceptable use policy](https://duckduckgo.com/acceptable-use) vieta l’incorporamento del servizio. La disponibilità delle fonti e le ricerche incomplete sono mostrate esplicitamente.
+
+L’elenco separa le presenze osservate dalle procedure broker senza possesso accertato. L’approvazione unica lega il lotto alle destinazioni e ai dati mostrati. Il motore esegue prima gli adattatori automatici qualificati, poi accoda verifiche assistite nel browser integrato. **Il catalogo distribuito contiene attualmente procedure manuali: nessun broker reale è dichiarato automatizzato o qualificato.** Il flusso automatico è collaudato esclusivamente con procedure sintetiche. Restano disponibili fonti ufficiali, link diretti e bozze email; gli opt-out basati su cookie vanno eseguiti nel browser abituale e non equivalgono alla cancellazione dei dati.
+
+Vedi [uso e limiti del percorso guidato](docs/desktop.md). I precedenti archivi si aprono facoltativamente da **Apri archivio precedente**; non vengono migrati o sovrascritti.
+
 ## Avvio locale
 
 È disponibile anche il progetto dell’**app desktop Windows**, con interfaccia React incorporata, archivio locale e conferme individuali. Per creare l’installer di sviluppo: `scripts/build-desktop.ps1` (Python 3.13 x64, Node 22 LTS, Inno Setup 6). Il dispositivo dell’utente non richiede Python. Vedi [guida desktop e distribuzione](docs/desktop.md), [copertura delle funzioni](docs/desktop-coverage.md) e [verifiche e limiti](docs/desktop-validation.md). La build di sviluppo non firmata non è una release pubblica qualificata.

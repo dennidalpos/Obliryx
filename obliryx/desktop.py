@@ -21,6 +21,7 @@ from .desktop_schema import OPERATIONS, POSITIONAL
 from .interaction import using
 from .mail_import import collect, eml_snapshot, read_eml
 from .store import Store
+from .privacy_workflow import PrivacyWorkflow
 
 
 class Cancelled(Exception):
@@ -119,6 +120,7 @@ class DesktopAPI:
         self._last_activity = clock()
         self._window = None
         self._stopped = threading.Event()
+        self._workflow = PrivacyWorkflow(self)
         self._thread = threading.Thread(target=self._worker, daemon=True, name="obliryx-vault")
         self._thread.start()
         threading.Thread(target=self._idle_watch, daemon=True, name="obliryx-lock").start()
@@ -154,6 +156,7 @@ class DesktopAPI:
             self.lock()
 
     def _close(self):
+        self._workflow.close()
         self.lock()
         self._stopped.set()
         future = Future()
@@ -208,6 +211,7 @@ class DesktopAPI:
 
     @safe
     def lock(self):
+        self._workflow.cancel(clear=True)
         with self._mutex:
             self._generation += 1
             self._unlocked = False
@@ -261,6 +265,8 @@ class DesktopAPI:
 
     @safe
     def start(self, operation, parameters=None):
+        if self._workflow.snapshot()["busy"]:
+            raise ValueError("Completa prima il percorso guidato.")
         if operation not in OPERATIONS or not isinstance(parameters, (dict, type(None))):
             raise ValueError("Operazione desktop non valida.")
         parameters = parameters or {}
@@ -392,3 +398,49 @@ class DesktopAPI:
         if not selected:
             return None
         return str(selected if isinstance(selected, str) else selected[0])
+
+    @safe
+    def workflow_open(self):
+        return self._workflow.open()
+
+    @safe
+    def workflow_status(self):
+        return {"unlocked": self._unlocked, **self._workflow.snapshot()}
+
+    @safe
+    def workflow_analyze(self, values):
+        return self._workflow.analyze(values)
+
+    @safe
+    def workflow_inspect(self, url):
+        return self._workflow.inspect_url(url)
+
+    @safe
+    def workflow_plan(self, selected):
+        return self._workflow.plan(selected)
+
+    @safe
+    def workflow_edit_selection(self):
+        return self._workflow.edit_selection()
+
+    @safe
+    def workflow_execute(self, plan_id):
+        return self._workflow.execute(plan_id)
+
+    @safe
+    def workflow_respond(self, request_id, answer):
+        return self._workflow.respond(request_id, answer)
+
+    @safe
+    def workflow_cancel(self):
+        self._workflow.cancel()
+
+    @safe
+    def workflow_link(self, identifier):
+        return self._workflow.link(identifier)
+
+    @safe
+    def workflow_browser(self):
+        if not self._workflow.snapshot()["assistance"]:
+            raise ValueError("Nessuna verifica assistita in corso.")
+        self._workflow._get_browser().show()

@@ -98,11 +98,11 @@ components:
 
 ## Overview
 
-**Creative North Star: "Archivio personale"**
+**Creative North Star: "Cerca le tue tracce. Scegli come intervenire."**
 
-Interfaccia desktop italiana sobria, con Segoe UI, superfici bianche e grigio chiaro, testo grafite e accento blu. La gerarchia privilegia prove, provenienza e prossimo passo; i controlli mantengono una forma familiare per Windows.
+Interfaccia desktop italiana sobria, con Segoe UI, superfici bianche e grigio chiaro, testo grafite e accento blu. L’ingresso principale è un percorso operativo in cinque fasi; la gerarchia privilegia dati richiesti, copertura effettiva delle fonti, selezione e approvazione. Gli archivi precedenti conservano un’interfaccia avanzata separata.
 
-La documentazione descrive `frontend/src/style.css` e `frontend/src/main.tsx`. I token nel frontmatter sono estratti dall'implementazione; non attestano da soli la verifica del comportamento assistivo o della distribuzione desktop.
+La documentazione descrive i token condivisi e le superfici del percorso guidato e degli archivi precedenti. I token nel frontmatter non attestano da soli la verifica del comportamento assistivo o della distribuzione desktop.
 
 **Key Characteristics:**
 - Gerarchia leggibile e densità operativa contenuta.
@@ -130,6 +130,14 @@ Un solo stack Segoe UI con fallback sans-serif. Il corpo base è definito sulla 
 L'introduzione all'archivio usa un titolo più ampio (2.25rem, interlinea 1.3), ridotto a 1.875rem sotto la soglia intermedia. Il marchio testuale usa 1.5rem, peso 700 e spaziatura −0.03em. Date con cifre tabulari. Nessun carattere display o monospace distinto.
 
 ## Layout
+
+### Percorso Web principale
+
+Intestazione orizzontale, indicatore delle cinque fasi con fase corrente testuale e area centrale fino a 1080px. Nessuna barra laterale nel percorso principale. Il modulo identificativi ha due colonne, poi una sotto 520px. La copertura delle fonti ha un riepilogo sempre visibile con conteggi effettivi e dettagli espandibili, inizialmente chiusi per lasciare spazio al compito corrente. Risultati e interventi usano righe con separatori, selezione multipla e dettagli testuali; presenze e broker rimangono gruppi distinti. L’approvazione è una fase della pagina con una sola casella esplicita. L’assistenza evidenzia dominio e controlli Continua/Salta; il sito si apre nella finestra nativa isolata dell’app, con comando Torna all’app.
+
+Margini 40px, ridotti a 24px sotto 800px e 16px sotto 520px. Passi e controlli vanno a capo; indirizzi e campi lunghi si spezzano senza scorrimento orizzontale. Nessuna animazione automatica aggiunta. Il focus raggiunge il titolo a ogni cambio fase; stati e risultati non dipendono solo dal colore.
+
+### Interfaccia degli archivi precedenti
 
 La shell usa una colonna di navigazione (224px) e uno spazio di lavoro fluido, senza larghezza massima globale. Il contenuto ha margini interni di 36px, con 20px in basso. L'intestazione precede attività, moduli e contenuto. Ricerca e filtri formano una barra; il campo di ricerca occupa il doppio dello spazio degli altri campi.
 

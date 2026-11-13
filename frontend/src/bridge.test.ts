@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {api, filterFindings, Finding, label} from './bridge';
+import {api, filterFindings, Finding, label, workflowLabels, workflowStep} from './bridge';
 
 describe('local finding review', () => {
   const items = [
@@ -19,5 +19,11 @@ describe('local finding review', () => {
   it('propagates bridge rejection without returning its value', async () => {
     Object.assign(globalThis, {window:{pywebview:{api:{status:async()=>({ok:false,error:'Archivio bloccato'})}}}});
     await expect(api('status')).rejects.toThrow('Archivio bloccato');
+  });
+  it('keeps workflow stages sequential and completion in the fifth stage', () => {
+    expect(['input','analysis','results','approval','execution','done'].map(workflowStep)).toEqual([0,1,2,3,4,4]);
+    expect(workflowLabels.holding_unknown).toContain('non verificato');
+    expect(workflowLabels.delivery_unknown).toContain('nessun nuovo tentativo');
+    expect(workflowLabels.accepted).toContain('rimozione da verificare');
   });
 });

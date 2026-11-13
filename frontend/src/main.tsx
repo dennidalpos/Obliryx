@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {api, Boot, Finding, Job, Operation, Request, Status, filterFindings, label} from './bridge';
 import './style.css';
+import {Workflow} from './workflow';
 
 const pages = [['findings', 'Riscontri'], ['import', 'Importa e monitora'], ['search', 'Ricerche'], ['brokers', 'Procedure broker'], ['archive', 'Archivio']];
 const date = (s: unknown) => typeof s === 'string' && !Number.isNaN(Date.parse(s)) ? new Date(s).toLocaleDateString('it-IT') : '—';
@@ -203,4 +204,9 @@ function App() {
   </div>;
 }
 
-createRoot(document.getElementById('root')!).render(<App/>);
+function DesktopRoot() {
+  const [legacy, setLegacy] = useState(false);
+  return legacy ? <><div className="legacy-return"><button onClick={async()=>{await api('lock'); setLegacy(false);}}>Torna alla ricerca Web</button></div><App/></> : <Workflow onLegacy={()=>setLegacy(true)}/>;
+}
+
+createRoot(document.getElementById('root')!).render(<DesktopRoot/>);

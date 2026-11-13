@@ -86,10 +86,13 @@ def run_window(api, assets, width=1280, height=800, ready=None):
     webview.settings['IGNORE_SSL_ERRORS'] = False
     hooks = []
     with asset_server(assets) as url:
-        window = webview.create_window('Obliryx — Archivio personale', url, js_api=api,
+        window = webview.create_window('Obliryx — Cerca e intervieni', url, js_api=api,
                                        width=width, height=height, min_size=(640, 480),
                                        background_color='#ffffff', text_select=True)
         api._window = window
+        from .browser_session import BrowserSession
+        api._workflow.browser_factory = lambda: BrowserSession(window, api._directory / 'browser-sessions')
+        window.events.closing += lambda: api._workflow.close()
 
         def secure_host():
             # Native setup runs on the UI thread before accepting navigation.

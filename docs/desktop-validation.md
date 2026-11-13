@@ -1,5 +1,19 @@
 # Verifiche desktop — 13 novembre 2026
 
+## Percorso Web a cinque fasi
+
+Verifica locale aggiornata: **71 test Python riusciti**, controllo dipendenze riuscito, CLI in modalità isolata riuscita, build TypeScript/Vite e **4 test frontend riusciti**. I 19 test del nuovo percorso coprono fonti indisponibili, risultati API candidati, confronto della pagina, omonimi, limiti, deduplicazione, approvazioni scadute o revocate, ordinamento automatici/assistiti, CAPTCHA, cambi del contratto e timeout senza ripetizione.
+
+`scripts/smoke-privacy-workflow.py` esercita l’app reale su Windows/WebView2: apertura DPAPI senza password, API gratuite con risposte sintetiche, pagina dinamica intercettata, browser InPrivate senza bridge/oggetti host/messaggi Web, un solo POST approvato e ricevuta riconosciuta, passaggio assistito e prosecuzione, layout 1280/640, assenza di Web Storage e chiusura con svuotamento della sessione. Le richieste HTTPS sono intercettate e servite con HTML sintetico: **nessuna ricerca o richiesta di cancellazione reale viene eseguita dal collaudo**. Il profilo e le catture rimangono nella cartella ignorata `.desktop-work/workflow-smoke-<id>/`.
+
+Anche il collaudo nativo precedente (`scripts/smoke-desktop.py`) riesce attraverso **Apri archivio precedente**, comprendendo sblocco, elenco/dettaglio, revisione, backup approvato, zoom 200% e blocco della navigazione esterna nel bridge privilegiato.
+
+È stato inoltre compilato un nuovo installer locale non firmato, versione invariata 0.1.0.dev0. Il bundle supera `smoke-desktop.py --executable`: avvio del percorso principale, apertura dell’archivio precedente, revisione, backup, layout 1920/640 e isolamento della navigazione. La coda browser completa è collaudata nativamente dalla sorgente, non dal bundle. Inventario: 210 file e 20 distribuzioni Python. Nessuna installazione personale o pubblicazione effettuata.
+
+Limiti attuali: nessun adattatore broker reale qualificato; le schede distribuite restano manuali. Gli automatismi sono provati su contratti sintetici. GitHub e Wikipedia limitano la ricerca ai propri contenuti pubblici; non sono una scansione del Web. DuckDuckGo rimane un collegamento esterno a causa della policy di incorporamento. I risultati locali non qualificano provider reali, accessibilità assistiva o installazione su macchina pulita.
+
+## Collaudo precedente dell’interfaccia avanzata
+
 ## Risultati osservati
 
 Ambiente: Windows 11 x64, Python 3.13.17, WebView2 installato. Dati sintetici e server locali; nessun provider reale contattato per le prove operative.

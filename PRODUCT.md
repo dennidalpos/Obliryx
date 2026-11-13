@@ -4,16 +4,16 @@
 
 ## Users and purpose
 
-Cittadini che vogliono esaminare la propria posta e documentare esposizioni dei propri dati, senza terminale. Il prodotto raccoglie riscontri: un messaggio non dimostra acquisto dei dati o assenza di consenso.
+Cittadini che inseriscono i propri identificativi per cercare tracce pubbliche dei dati e scegliere gli interventi, senza terminale. L’ingresso principale è la ricerca Web, senza importazione della posta o gestione manuale dell’archivio. Una corrispondenza testuale non prova l’identità; una scheda broker non prova il possesso dei dati.
 
 ## Platform and stack
 
-Windows 11 x64; React e TypeScript in pywebview/WebView2, motore Python esistente e SQLite cifrato. Scelta confermata: interfaccia web incorporata, tutte le capacità operative della CLI, elenco guidato con dettaglio affiancato.
+Windows 11 x64; React e TypeScript in pywebview/WebView2, motore Python e SQLite cifrato. Cinque fasi: dati, analisi, selezione, approvazione, interventi. Browser WebView2 InPrivate separato dal bridge privilegiato, senza oggetti host o messaggi Web. Le funzioni precedenti restano nella CLI e nell’apertura facoltativa degli archivi precedenti.
 
 ## Constraints
 
-Nessun account Obliryx, telemetria o servizio cloud applicativo. Credenziali e valori cercati transitori. Conferme distinte per letture esterne e invii. POST senza cookie o redirect, registro invii locale separato dai backup. Una risposta accepted non prova la rimozione.
+Nessun account Obliryx, telemetria o API a pagamento. Credenziale locale automatica protetta da Windows DPAPI; identificativi transitori. Fonti gratuite: GitHub pubblico e Wikipedia italiana, con trasmissioni dichiarate prima dell’analisi e copertura limitata. DuckDuckGo solo tramite link esterno per il divieto di incorporamento. Approvazione unica del lotto, adattatori con contratti esatti e registro contro duplicati; CAPTCHA e verifiche in fondo alla coda. I vincoli degli invii HTTP della CLI restano distinti e invariati. Una risposta accepted non prova la rimozione.
 
 ## Success
 
-Installare senza Python, aprire o creare l'archivio, importare posta, comprendere un riscontro e approvare consapevolmente un'azione. Le procedure broker rimangono manuali; nessuna nuova automazione o scheduler.
+Aprire l’app senza password aggiuntiva, inserire almeno un identificativo, analizzare le fonti consultabili, selezionare e approvare il lotto, poi completare le verifiche assistite. Nessuna promessa di ricerca universale. Gli automatismi sono collaudati con dati sintetici; il catalogo reale rimane manuale finché ogni adattatore non viene qualificato. Nessuno scheduler.

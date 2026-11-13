@@ -50,6 +50,8 @@ def main():
             with sync_playwright() as pw:
                 browser = pw.chromium.connect_over_cdp(f'http://127.0.0.1:{port}')
                 page = browser.contexts[0].pages[0]
+                page.get_by_role('heading', name='Quali dati vuoi cercare?').wait_for()
+                page.get_by_role('button', name='Apri archivio precedente', exact=True).click()
                 page.wait_for_selector('text=Crea nuovo')
                 page.screenshot(path=str(evidence / 'onboarding.png'), full_page=True)
                 page.get_by_role('button', name='Apri esistente', exact=True).click()
