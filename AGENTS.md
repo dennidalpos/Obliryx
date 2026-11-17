@@ -34,3 +34,7 @@ Se cambia una scheda in `obliryx/broker_procedures.json`, aggiorna versione, dat
 - Test e demo usano solo dati sintetici e server HTTPS/IMAP locali; non contattare servizi reali.
 - Non versionare `*.eml`, `*.mbox`, `*.sqlite3*`, `.env`.
 <!-- secondbrain:repository:end -->
+
+## Git workflow (push policy)
+
+- The repository owner is an admin and changes are verified locally before any push. When a push is authorized, push directly to `main` and do not open a pull request. This applies only to pushes the user has authorized; it does not authorize committing or pushing on its own. If anything is unclear (failed checks, unexpected remote state, protected-branch rejection), stop and ask.
