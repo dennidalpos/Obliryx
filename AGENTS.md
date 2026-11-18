@@ -1,12 +1,13 @@
 <!-- secondbrain:repository:begin -->
-Common directives applied: revision **1.3** — 2026-11-13. <!-- secondbrain:source global=6B4E10F48D98505DB4ABF6C08AD8BB01229A0D33FF844A2C91781D63F291B480 workstation=BD2E210B49B3B77000F570E6F6191DC694798722B50900E6C3864E3DBDD78FF7 -->
+Common directives applied: revision **1.4** — 2026-11-14. <!-- secondbrain:source global=C9BEBD22A7BC4A859D2C498D88D98DFDEC32BF5A5DAB373CEF3E9C40E235B06F workstation=BD2E210B49B3B77000F570E6F6191DC694798722B50900E6C3864E3DBDD78FF7 -->
 ## SecondBrain
 
 Repository knowledge lives in the SecondBrain dossier; code, guides, and publishable assets stay here.
 
 - Load the slim startup with the SecondBrain checkout's scripts/knowledge.ps1 -Startup or MCP get_startup_context, and follow its references for detail. If the root is unreachable, report the dossier as unavailable.
-- Write only to this repository's dossier `01-projects/<repo>/`, only through SecondBrain scripts or MCP write tools. Work folders come from scripts/work.ps1 -Init; sessions, retention, and cleanup rules load from `sb prompt`.
+- Write only to this repository's dossier `repos/<repo>/`, only through SecondBrain scripts or MCP write tools. Work folders come from scripts/work.ps1 -Init; sessions, retention, and cleanup rules load from `sb prompt`.
 - Commits, pushes, deletions, and publication require specific authorization.
+<!-- secondbrain:repository:end -->
 
 ## Setup e controlli prima di chiudere
 
@@ -33,7 +34,6 @@ Se cambia una scheda in `obliryx/broker_procedures.json`, aggiorna versione, dat
 - Gli invii POST (one-click, moduli) richiedono conferme distinte, passano dal registro `action-state` e non seguono redirect né inviano cookie; non indebolire questi vincoli.
 - Test e demo usano solo dati sintetici e server HTTPS/IMAP locali; non contattare servizi reali.
 - Non versionare `*.eml`, `*.mbox`, `*.sqlite3*`, `.env`.
-<!-- secondbrain:repository:end -->
 
 ## Git workflow (push policy)
 
