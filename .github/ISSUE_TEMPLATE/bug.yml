@@ -1,0 +1,26 @@
+name: Problema con dati sintetici
+description: Segnala un problema riproducibile senza dati personali.
+body:
+  - type: markdown
+    attributes:
+      value: Non allegare email, archivi, passphrase, token, chiavi API o URL personali. Per vulnerabilità usa SECURITY.md.
+  - type: input
+    id: environment
+    attributes:
+      label: Versione e sistema operativo
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Passaggi con dati sintetici
+      description: Descrivi risultato atteso, risultato osservato ed eventuale errore oscurato.
+    validations:
+      required: true
+  - type: checkboxes
+    id: synthetic
+    attributes:
+      label: Controllo dei dati
+      options:
+        - label: Ho usato soltanto esempi sintetici e non ho incluso credenziali o dati personali.
+          required: true

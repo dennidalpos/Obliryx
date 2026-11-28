@@ -1,0 +1,342 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-13T00:00:05.979888+00:00",
+  "title": "Design System: Obliryx",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "primary",
+        "tonalRamp": [
+          "oklch(15% 0.0639 256.95)",
+          "oklch(27% 0.1150 256.95)",
+          "oklch(39% 0.1490 256.95)",
+          "oklch(51% 0.1490 256.95)",
+          "oklch(63% 0.1490 256.95)",
+          "oklch(75% 0.1490 256.95)",
+          "oklch(87% 0.0775 256.95)",
+          "oklch(95% 0.0298 256.95)"
+        ]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "primary-hover",
+        "tonalRamp": [
+          "oklch(15% 0.0504 254.98)",
+          "oklch(27% 0.0908 254.98)",
+          "oklch(39% 0.1177 254.98)",
+          "oklch(51% 0.1177 254.98)",
+          "oklch(63% 0.1177 254.98)",
+          "oklch(75% 0.1177 254.98)",
+          "oklch(87% 0.0612 254.98)",
+          "oklch(95% 0.0235 254.98)"
+        ]
+      },
+      "canvas": {
+        "role": "neutral",
+        "displayName": "canvas",
+        "tonalRamp": [
+          "oklch(15% 0.0000 89.88)",
+          "oklch(27% 0.0000 89.88)",
+          "oklch(39% 0.0000 89.88)",
+          "oklch(51% 0.0000 89.88)",
+          "oklch(63% 0.0000 89.88)",
+          "oklch(75% 0.0000 89.88)",
+          "oklch(87% 0.0000 89.88)",
+          "oklch(95% 0.0000 89.88)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "surface",
+        "tonalRamp": [
+          "oklch(15% 0.0015 247.86)",
+          "oklch(27% 0.0026 247.86)",
+          "oklch(39% 0.0034 247.86)",
+          "oklch(51% 0.0034 247.86)",
+          "oklch(63% 0.0034 247.86)",
+          "oklch(75% 0.0034 247.86)",
+          "oklch(87% 0.0018 247.86)",
+          "oklch(95% 0.0007 247.86)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "text",
+        "tonalRamp": [
+          "oklch(15% 0.0122 252.96)",
+          "oklch(27% 0.0220 252.96)",
+          "oklch(39% 0.0285 252.96)",
+          "oklch(51% 0.0285 252.96)",
+          "oklch(63% 0.0285 252.96)",
+          "oklch(75% 0.0285 252.96)",
+          "oklch(87% 0.0148 252.96)",
+          "oklch(95% 0.0057 252.96)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "muted",
+        "tonalRamp": [
+          "oklch(15% 0.0136 250.16)",
+          "oklch(27% 0.0245 250.16)",
+          "oklch(39% 0.0317 250.16)",
+          "oklch(51% 0.0317 250.16)",
+          "oklch(63% 0.0317 250.16)",
+          "oklch(75% 0.0317 250.16)",
+          "oklch(87% 0.0165 250.16)",
+          "oklch(95% 0.0063 250.16)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "line",
+        "tonalRamp": [
+          "oklch(15% 0.0065 251.17)",
+          "oklch(27% 0.0117 251.17)",
+          "oklch(39% 0.0152 251.17)",
+          "oklch(51% 0.0152 251.17)",
+          "oklch(63% 0.0152 251.17)",
+          "oklch(75% 0.0152 251.17)",
+          "oklch(87% 0.0079 251.17)",
+          "oklch(95% 0.0030 251.17)"
+        ]
+      },
+      "field-border": {
+        "role": "neutral",
+        "displayName": "field-border",
+        "tonalRamp": [
+          "oklch(15% 0.0131 251.58)",
+          "oklch(27% 0.0237 251.58)",
+          "oklch(39% 0.0307 251.58)",
+          "oklch(51% 0.0307 251.58)",
+          "oklch(63% 0.0307 251.58)",
+          "oklch(75% 0.0307 251.58)",
+          "oklch(87% 0.0159 251.58)",
+          "oklch(95% 0.0061 251.58)"
+        ]
+      },
+      "hover": {
+        "role": "neutral",
+        "displayName": "hover",
+        "tonalRamp": [
+          "oklch(15% 0.0049 252.09)",
+          "oklch(27% 0.0088 252.09)",
+          "oklch(39% 0.0114 252.09)",
+          "oklch(51% 0.0114 252.09)",
+          "oklch(63% 0.0114 252.09)",
+          "oklch(75% 0.0114 252.09)",
+          "oklch(87% 0.0059 252.09)",
+          "oklch(95% 0.0023 252.09)"
+        ]
+      },
+      "active": {
+        "role": "neutral",
+        "displayName": "active",
+        "tonalRamp": [
+          "oklch(15% 0.0096 254.40)",
+          "oklch(27% 0.0173 254.40)",
+          "oklch(39% 0.0224 254.40)",
+          "oklch(51% 0.0224 254.40)",
+          "oklch(63% 0.0224 254.40)",
+          "oklch(75% 0.0224 254.40)",
+          "oklch(87% 0.0117 254.40)",
+          "oklch(95% 0.0045 254.40)"
+        ]
+      },
+      "selected": {
+        "role": "neutral",
+        "displayName": "selected",
+        "tonalRamp": [
+          "oklch(15% 0.0061 254.61)",
+          "oklch(27% 0.0110 254.61)",
+          "oklch(39% 0.0142 254.61)",
+          "oklch(51% 0.0142 254.61)",
+          "oklch(63% 0.0142 254.61)",
+          "oklch(75% 0.0142 254.61)",
+          "oklch(87% 0.0074 254.61)",
+          "oklch(95% 0.0028 254.61)"
+        ]
+      },
+      "danger": {
+        "role": "neutral",
+        "displayName": "danger",
+        "tonalRamp": [
+          "oklch(15% 0.0680 28.02)",
+          "oklch(27% 0.1223 28.02)",
+          "oklch(39% 0.1586 28.02)",
+          "oklch(51% 0.1586 28.02)",
+          "oklch(63% 0.1586 28.02)",
+          "oklch(75% 0.1586 28.02)",
+          "oklch(87% 0.0825 28.02)",
+          "oklch(95% 0.0317 28.02)"
+        ]
+      },
+      "danger-surface": {
+        "role": "neutral",
+        "displayName": "danger-surface",
+        "tonalRamp": [
+          "oklch(15% 0.0078 34.30)",
+          "oklch(27% 0.0141 34.30)",
+          "oklch(39% 0.0183 34.30)",
+          "oklch(51% 0.0183 34.30)",
+          "oklch(63% 0.0183 34.30)",
+          "oklch(75% 0.0183 34.30)",
+          "oklch(87% 0.0095 34.30)",
+          "oklch(95% 0.0037 34.30)"
+        ]
+      },
+      "warning": {
+        "role": "neutral",
+        "displayName": "warning",
+        "tonalRamp": [
+          "oklch(15% 0.0413 77.21)",
+          "oklch(27% 0.0744 77.21)",
+          "oklch(39% 0.0964 77.21)",
+          "oklch(51% 0.0964 77.21)",
+          "oklch(63% 0.0964 77.21)",
+          "oklch(75% 0.0964 77.21)",
+          "oklch(87% 0.0501 77.21)",
+          "oklch(95% 0.0193 77.21)"
+        ]
+      },
+      "warning-surface": {
+        "role": "neutral",
+        "displayName": "warning-surface",
+        "tonalRamp": [
+          "oklch(15% 0.0148 88.77)",
+          "oklch(27% 0.0266 88.77)",
+          "oklch(39% 0.0345 88.77)",
+          "oklch(51% 0.0345 88.77)",
+          "oklch(63% 0.0345 88.77)",
+          "oklch(75% 0.0345 88.77)",
+          "oklch(87% 0.0180 88.77)",
+          "oklch(95% 0.0069 88.77)"
+        ]
+      },
+      "success": {
+        "role": "neutral",
+        "displayName": "success",
+        "tonalRamp": [
+          "oklch(15% 0.0397 151.89)",
+          "oklch(27% 0.0714 151.89)",
+          "oklch(39% 0.0926 151.89)",
+          "oklch(51% 0.0926 151.89)",
+          "oklch(63% 0.0926 151.89)",
+          "oklch(75% 0.0926 151.89)",
+          "oklch(87% 0.0482 151.89)",
+          "oklch(95% 0.0185 151.89)"
+        ]
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "button-background",
+        "value": "background-color 140ms ease-out",
+        "purpose": "Solo pulsanti, sotto prefers-reduced-motion:no-preference."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide",
+        "value": "1600px"
+      },
+      {
+        "name": "single-detail",
+        "value": "1100px"
+      },
+      {
+        "name": "stacked-navigation",
+        "value": "700px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Pulsante estratto dagli stati CSS implementati.",
+      "html": "<button class=\"ds-primary\">Continua</button>",
+      "css": ".ds-primary{min-height:40px;padding:8px 14px;border:1px solid var(--line,#ced6df);border-radius:6px;background:#fff;color:#202b38;cursor:pointer;font:600 16px \"Segoe UI\",sans-serif;background:var(--accent,#1759ad);color:#fff;border-color:var(--accent,#1759ad);}.ds-primary:hover{background:#104785}.ds-primary:active{background:#dbe6f4}.ds-primary:focus-visible{outline:3px solid #1759ad;outline-offset:3px}.ds-primary:disabled{opacity:.55;cursor:not-allowed}@media(prefers-reduced-motion:no-preference){.ds-primary{transition:background-color 140ms ease-out}}"
+    },
+    {
+      "name": "Secondary button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Pulsante estratto dagli stati CSS implementati.",
+      "html": "<button class=\"ds-secondary\">Annulla</button>",
+      "css": ".ds-secondary{min-height:40px;padding:8px 14px;border:1px solid var(--line,#ced6df);border-radius:6px;background:#fff;color:#202b38;cursor:pointer;font:600 16px \"Segoe UI\",sans-serif;}.ds-secondary:hover{background:#e9eff6}.ds-secondary:active{background:#dbe6f4}.ds-secondary:focus-visible{outline:3px solid #1759ad;outline-offset:3px}.ds-secondary:disabled{opacity:.55;cursor:not-allowed}@media(prefers-reduced-motion:no-preference){.ds-secondary{transition:background-color 140ms ease-out}}"
+    },
+    {
+      "name": "Text button",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Pulsante estratto dagli stati CSS implementati.",
+      "html": "<button class=\"ds-text\">Scegli file…</button>",
+      "css": ".ds-text{min-height:40px;padding:8px 14px;border:1px solid var(--line,#ced6df);border-radius:6px;background:#fff;color:#202b38;cursor:pointer;font:600 16px \"Segoe UI\",sans-serif;border:0;color:var(--accent,#1759ad);padding-left:0;background:transparent;text-align:left;}.ds-text:hover{background:#e9eff6}.ds-text:active{background:#dbe6f4}.ds-text:focus-visible{outline:3px solid #1759ad;outline-offset:3px}.ds-text:disabled{opacity:.55;cursor:not-allowed}@media(prefers-reduced-motion:no-preference){.ds-text{transition:background-color 140ms ease-out}}"
+    },
+    {
+      "name": "Labeled field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "Campo con etichetta sopra e bordo marcato.",
+      "html": "<label class=\"ds-label\">Organizzazione<input class=\"ds-field\" placeholder=\"Nome dell’organizzazione\"></label>",
+      "css": ".ds-label{display:block;font:600 14px \"Segoe UI\",sans-serif;margin-bottom:16px}.ds-field{display:block;width:100%;min-height:42px;border:1px solid #8594a5;border-radius:5px;background:#fff;color:#202b38;padding:8px 10px;margin-top:7px;font:400 16px \"Segoe UI\",sans-serif;caret-color:var(--accent,#1759ad)}.ds-field::placeholder{color:#5e6b79}.ds-field:focus-visible{outline:3px solid #1759ad;outline-offset:3px}"
+    },
+    {
+      "name": "Current navigation item",
+      "kind": "nav",
+      "refersTo": "navigation-current",
+      "description": "Navigazione corrente con icona lineare e stato semantico.",
+      "html": "<nav aria-label=\"Navigazione principale\"><button class=\"ds-nav\" aria-current=\"page\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 5h16v15H4z M8 3v4 M16 3v4 M8 11h8 M8 15h5\"/></svg>Riscontri</button></nav>",
+      "css": ".ds-nav{min-height:40px;padding:8px 14px;border:1px solid var(--line,#ced6df);border-radius:6px;background:#fff;color:#202b38;cursor:pointer;font:600 16px \"Segoe UI\",sans-serif;display:flex;gap:12px;align-items:center;text-align:left;font-size:14px;padding:10px;color:#114c94;background:#e2ebf6;border-color:#bfcee0}.ds-nav:hover{background:#e2ebf6}.ds-nav:active{background:#e2ebf6}.ds-nav:focus-visible{outline:3px solid #1759ad;outline-offset:3px}"
+    },
+    {
+      "name": "Severity label",
+      "kind": "chip",
+      "refersTo": "severity-high",
+      "description": "Etichetta informativa di gravità, senza interazione.",
+      "html": "<span class=\"ds-severity\">alta</span>",
+      "css": ".ds-severity{font:12px \"Segoe UI\",sans-serif;padding:3px 6px;border-radius:3px;color:#a52c25;background:#fcece8;white-space:nowrap}@media(forced-colors:active){.ds-severity{border:1px solid CanvasText}}"
+    },
+    {
+      "name": "Selected finding",
+      "kind": "custom",
+      "refersTo": "finding-selected",
+      "description": "Riga con selezione, metadati e separatore.",
+      "html": "<button class=\"ds-finding\" aria-pressed=\"true\"><strong>Esempio sintetico</strong><span>Oggetto del messaggio</span><small>Da verificare · 13/11/2026</small></button>",
+      "css": ".ds-finding{min-height:40px;padding:8px 14px;border:1px solid var(--line,#ced6df);border-radius:6px;background:#fff;color:#202b38;cursor:pointer;font:600 16px \"Segoe UI\",sans-serif;display:block;width:100%;border:0;border-bottom:1px solid var(--line,#ced6df);border-radius:0;text-align:left;padding:20px 16px;font-weight:400;background:#eaf1fa}.ds-finding span{display:block;font-size:14px;color:var(--muted,#526171);margin:8px 0 12px}.ds-finding small{font-size:12px;color:var(--muted,#526171)}.ds-finding:hover,.ds-finding:active{background:#eaf1fa}.ds-finding:focus-visible{outline:3px solid #1759ad;outline-offset:3px}"
+    },
+    {
+      "name": "Neutral notice",
+      "kind": "card",
+      "refersTo": "notice",
+      "description": "Avviso piatto dentro la lettura; nessuna ombra o interazione.",
+      "html": "<p class=\"ds-notice\">La presenza di un messaggio non dimostra acquisto dei dati o assenza di consenso.</p>",
+      "css": ".ds-notice{background:var(--surface,#f4f6f8);color:#202b38;padding:14px 16px;margin:16px 0;font:14px/1.6 \"Segoe UI\",sans-serif}@media(forced-colors:active){.ds-notice{border:1px solid CanvasText}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Archivio personale",
+    "overview": "Interfaccia desktop italiana sobria, con Segoe UI, superfici bianche e grigio chiaro, testo grafite e accento blu. La gerarchia privilegia prove, provenienza e prossimo passo; i controlli mantengono una forma familiare per Windows.\n\nLa documentazione descrive `frontend/src/style.css` e `frontend/src/main.tsx`. I token nel frontmatter sono estratti dall'implementazione; non attestano da soli la verifica del comportamento assistivo o della distribuzione desktop.",
+    "keyCharacteristics": [
+      "Gerarchia leggibile e densità operativa contenuta.",
+      "Superfici piatte, separatori sottili, accento riservato alle azioni e agli stati.",
+      "Etichette italiane, stati testuali e anteprime strutturate."
+    ],
+    "rules": [],
+    "dos": [
+      "**Do** conservare Segoe UI, superfici piatte e gerarchia italiana della versione implementata.",
+      "**Do** accompagnare gravità, selezioni ed esiti con testo o stato semantico.",
+      "**Do** mantenere focus visibile, ritorno all'elenco e valori lunghi leggibili.",
+      "**Do** preservare le anteprime e le conferme distinte prima delle azioni esterne."
+    ],
+    "donts": [
+      "**Don't** sostituire prove e provenienza con punteggi inventati.",
+      "**Don't** aggiungere ombre decorative, gradienti o animazioni d'ingresso alla direzione sobria approvata.",
+      "**Don't** rappresentare un invio accettato come prova della rimozione."
+    ]
+  }
+}
