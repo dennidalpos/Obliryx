@@ -1,7 +1,19 @@
-# Segnalazioni di sicurezza
+# Security Policy
 
-Non pubblicare dati personali, messaggi originali, archivi o credenziali nelle issue. Usa una riproduzione sintetica, indicando versione, sistema operativo, operazione e comportamento osservato. Oscura anche parametri degli URL, percorsi personali e contenuto delle anteprime.
+## Supported versions
 
-Per una vulnerabilità che consente accesso ai dati o invii non autorizzati, usa il canale privato **Report a vulnerability** nella scheda Security del repository GitHub, se disponibile. Se non è disponibile, apri soltanto una richiesta neutra di contatto privato, senza exploit, dati o allegati sensibili. Non è ancora dichiarato un indirizzo dedicato né un tempo garantito di risposta.
+È supportato solo l'ultimo commit del ramo `main`. La versione 0.1.0.dev0 è sperimentale.
 
-La versione 0.1.0.dev0 è sperimentale. I test sintetici non qualificano ogni provider reale. La build pubblica desktop richiede firma Authenticode e collaudo su Windows pulito; una build locale non firmata non equivale a una release qualificata.
+## Reporting a vulnerability
+
+Non aprire issue pubbliche per problemi di sicurezza.
+
+Usa la segnalazione privata di GitHub: apri la scheda **Security** di questo repository e scegli **Report a vulnerability**. Indica versione, sistema operativo, operazione e comportamento osservato, usando una riproduzione sintetica. Non allegare dati personali, messaggi originali, archivi o credenziali; oscura anche parametri degli URL, percorsi personali e contenuto delle anteprime.
+
+Non è dichiarato un tempo garantito di risposta. Le correzioni confermate arrivano su `main` e sono rese pubbliche dopo il rilascio della correzione.
+
+## Scope notes
+
+- Una vulnerabilità che consente accesso ai dati o invii non autorizzati ha priorità.
+- I test sintetici non qualificano ogni provider reale.
+- La build pubblica desktop richiede firma Authenticode e collaudo su Windows pulito; una build locale non firmata non equivale a una release qualificata.
